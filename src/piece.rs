@@ -1,5 +1,6 @@
 use std::fmt;
 
+#[derive(Clone)]
 pub struct Piece {
 	pub is_player: bool,
 	pub is_master: bool

@@ -31,6 +31,19 @@ impl Field {
 			]
 		}
 	}
+
+	pub fn get_all_pieces(self) -> Vec<Piece> {
+		let mut pieces: Vec<Piece> = Vec::new();
+		for row in self.cells.iter() {
+			for cell in row.iter() {
+				match cell {
+					Cell::Occupied(piece) => pieces.push(piece.clone()),
+					_ => ()
+				}
+			}
+		}
+		pieces
+	}
 }
 
 impl fmt::Display for Field {
