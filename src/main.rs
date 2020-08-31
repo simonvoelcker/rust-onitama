@@ -1,6 +1,7 @@
 mod field;
 mod cell;
 mod piece;
+mod position;
 
 use field::Field;
 
@@ -9,7 +10,7 @@ fn main() {
     println!("{}", field);
 
     let all_pieces = field.get_all_pieces(true);
-    for (piece, x, y) in all_pieces.iter() {
-	    println!("{} @ {},{}", piece, x, y);
+    for (piece, position) in all_pieces.iter() {
+	    println!("{} @ {}", piece, position);
     }
 }
