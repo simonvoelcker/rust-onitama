@@ -32,13 +32,14 @@ impl Field {
 		}
 	}
 
-	pub fn get_all_pieces(self) -> Vec<Piece> {
-		let mut pieces: Vec<Piece> = Vec::new();
-		for row in self.cells.iter() {
-			for cell in row.iter() {
-				match cell {
-					Cell::Occupied(piece) => pieces.push(piece.clone()),
-					_ => ()
+	pub fn get_all_pieces(self, is_player: bool) -> Vec<(Piece, usize, usize)> {
+		let mut pieces: Vec<(Piece, usize, usize)> = Vec::new();
+		for (row_idx, row) in self.cells.iter().enumerate() {
+			for (col_idx, cell) in row.iter().enumerate() {
+				if let Cell::Occupied(piece) = cell {
+					if piece.is_player == is_player {
+						pieces.push((piece.clone(), col_idx, row_idx))
+					}
 				}
 			}
 		}
