@@ -2,6 +2,7 @@ use std::fmt;
 use crate::cell::Cell;
 use crate::piece::Piece;
 use crate::position::Position;
+use crate::card::Card;
 
 
 pub struct Field {
@@ -43,10 +44,14 @@ impl Field {
 		positions
 	}
 
-	pub fn get_all_pieces(self, is_player: bool) -> Vec<(Piece, Position)> {
+	pub fn get_cell(&self, position: &Position) -> &Cell {
+		return &self.cells[position.x as usize][position.y as usize];
+	}
+
+	pub fn get_all_pieces(&self, is_player: bool) -> Vec<(Piece, Position)> {
 		let mut pieces: Vec<(Piece, Position)> = Vec::new();
 		for position in Field::get_all_positions() {
-			let cell = &self.cells[position.x][position.y];
+			let cell: &Cell = self.get_cell(&position);
 			if let Cell::Occupied(piece) = cell {
 				if piece.is_player == is_player {
 					pieces.push((piece.clone(), position))
@@ -56,8 +61,15 @@ impl Field {
 		pieces
 	}
 
-	pub fn get_all_moves(self, piece: Piece, position: Position) -> usize {
-		0
+	pub fn get_all_moves(&self, piece: &Piece, position: &Position, card: &Card) -> Vec<Position> {
+		let mut targets: Vec<Position> = Vec::new();
+		for offset in card.moves.iter() {
+			let target = position.offset(&offset);
+			if target.in_field() {
+				targets.push(target)
+			}
+		}
+		targets
 	}
 }
 
