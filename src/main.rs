@@ -5,12 +5,17 @@ mod position;
 mod card;
 mod game;
 
+use rand::seq::SliceRandom;
+
 use game::Game;
 use card::Card;
 
 fn main() {
 
     let mut cards = Card::get_all_cards();
+	let mut rng = &mut rand::thread_rng();	
+	cards.shuffle(&mut rng);
+
 	let game = Game::new((
 		cards.pop().expect(""),
 		cards.pop().expect(""),

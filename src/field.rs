@@ -2,7 +2,6 @@ use std::fmt;
 use crate::cell::Cell;
 use crate::piece::Piece;
 use crate::position::Position;
-use crate::card::Card;
 
 
 pub struct Field {
