@@ -10,35 +10,21 @@ pub struct Field {
 
 impl Field {
 	pub fn new() -> Self {
-		Self {
+		let mut field = Self {
 			cells: vec![
-				vec![
-					Cell::Occupied(Piece {player: 2, is_master: false}),
-					Cell::Empty, Cell::Empty, Cell::Empty,
-					Cell::Occupied(Piece {player: 1, is_master: false}),
-				],
-				vec![
-					Cell::Occupied(Piece {player: 2, is_master: false}),
-					Cell::Empty, Cell::Empty, Cell::Empty,
-					Cell::Occupied(Piece {player: 1, is_master: false}),
-				],
-				vec![
-					Cell::Occupied(Piece {player: 2, is_master: true}),
-					Cell::Empty, Cell::Empty, Cell::Empty,
-					Cell::Occupied(Piece {player: 1, is_master: true}),
-				],
-				vec![
-					Cell::Occupied(Piece {player: 2, is_master: false}),
-					Cell::Empty, Cell::Empty, Cell::Empty,
-					Cell::Occupied(Piece {player: 1, is_master: false}),
-				],
-				vec![
-					Cell::Occupied(Piece {player: 2, is_master: false}),
-					Cell::Empty, Cell::Empty, Cell::Empty,
-					Cell::Occupied(Piece {player: 1, is_master: false}),
-				],
+				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
+				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
+				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
+				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
+				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
 			]
-		}
+		};
+		// for col in 0..5 {
+        //     field.cells[col][0] = Cell::Occupied(Piece {player: 2, is_master: col == 2});
+        //     field.cells[col][4] = Cell::Occupied(Piece {player: 1, is_master: col == 2});
+		// }
+		field.cells[2][2] = Cell::Occupied(Piece {player: 0, is_master: true});
+		field
 	}
 
 	pub fn get_all_positions() -> Vec<Position> {
@@ -75,7 +61,7 @@ impl fmt::Display for Field {
 		for y in 0..5 {
 			write!(f, "{}  | ", 5-y)?;
 			for x in 0..5 {
-				let cell: &Cell = self.get_cell(&Position { x, y });
+				let cell: &Cell = self.get_cell(&Position { x: x, y: 4-y });
 				write!(f, "{} ", cell)?;
 			}
 			write!(f, "|\n")?;

@@ -19,7 +19,7 @@ impl Game {
 			field: Field::new(),
 			players,
 			public_card,
-			current_player: 1,
+			current_player: 0,
 		}
 	}
 
@@ -45,11 +45,11 @@ impl Game {
 impl fmt::Display for Game {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		write!(f, "\n{}\n", self.players[1])?;
-		if self.current_player == 2 {
+		if self.current_player == 1 {
 			write!(f, "Public: {}\n", self.public_card)?;
 		}
 		write!(f, "{}", self.field)?;
-		if self.current_player == 1 {
+		if self.current_player == 0 {
 			write!(f, "Public: {}\n", self.public_card)?;
 		}
 		write!(f, "{}\n", self.players[0])

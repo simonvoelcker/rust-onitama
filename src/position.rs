@@ -20,7 +20,7 @@ impl Position {
 
 impl fmt::Display for Position {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{},{}", ('A' as u8 + self.x as u8) as char, 5-self.y)
+		write!(f, "{}{}", ('A' as u8 + self.x as u8) as char, self.y+1)
 	}
 }
 

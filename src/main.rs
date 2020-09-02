@@ -29,7 +29,7 @@ fn main() {
 
     let options: Vec<(Position, usize, Position)> = game.get_all_options();
     for (position, card_index, target_position) in options.iter() {
-    	let card: &Card = &game.players[game.current_player-1].cards[*card_index];
+    	let card: &Card = &game.players[game.current_player].cards[*card_index];
 	    println!("Option: {} -> {} (using {})", position, target_position, card);
     }
 }
