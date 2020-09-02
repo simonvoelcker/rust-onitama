@@ -15,20 +15,28 @@ impl Field {
 			cells: vec![
 				vec![
 					Cell::Occupied(Piece {is_player: false, is_master: false}),
-					Cell::Occupied(Piece {is_player: false, is_master: false}),
-					Cell::Occupied(Piece {is_player: false, is_master: true}),
-					Cell::Occupied(Piece {is_player: false, is_master: false}),
-					Cell::Occupied(Piece {is_player: false, is_master: false})
-				], 
-				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty], 
-				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty], 
-				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty], 
+					Cell::Empty, Cell::Empty, Cell::Empty,
+					Cell::Occupied(Piece {is_player: true, is_master: false}),
+				],
 				vec![
+					Cell::Occupied(Piece {is_player: false, is_master: false}),
+					Cell::Empty, Cell::Empty, Cell::Empty,
 					Cell::Occupied(Piece {is_player: true, is_master: false}),
-					Cell::Occupied(Piece {is_player: true, is_master: false}),
+				],
+				vec![
+					Cell::Occupied(Piece {is_player: false, is_master: true}),
+					Cell::Empty, Cell::Empty, Cell::Empty,
 					Cell::Occupied(Piece {is_player: true, is_master: true}),
+				],
+				vec![
+					Cell::Occupied(Piece {is_player: false, is_master: false}),
+					Cell::Empty, Cell::Empty, Cell::Empty,
 					Cell::Occupied(Piece {is_player: true, is_master: false}),
-					Cell::Occupied(Piece {is_player: true, is_master: false})
+				],
+				vec![
+					Cell::Occupied(Piece {is_player: false, is_master: false}),
+					Cell::Empty, Cell::Empty, Cell::Empty,
+					Cell::Occupied(Piece {is_player: true, is_master: false}),
 				],
 			]
 		}
@@ -75,12 +83,16 @@ impl Field {
 
 impl fmt::Display for Field {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		for row in self.cells.iter() {
-			for cell in row.iter() {
+		write!(f, "    -----------\n").expect("");
+		for y in 0..5 {
+			write!(f, "{}  | ", 5-y).expect("");
+			for x in 0..5 {
+				let cell: &Cell = self.get_cell(&Position { x, y });
 				write!(f, "{} ", cell).expect("");
 			}
-			write!(f, "\n").expect("");
+			write!(f, "|\n").expect("");
 		}
-		write!(f, "\n")
+		write!(f, "    -----------\n").expect("");
+		write!(f, "     A B C D E\n\n")
 	}
 }
