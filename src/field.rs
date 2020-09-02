@@ -13,29 +13,29 @@ impl Field {
 		Self {
 			cells: vec![
 				vec![
-					Cell::Occupied(Piece {is_player: false, is_master: false}),
+					Cell::Occupied(Piece {player: 2, is_master: false}),
 					Cell::Empty, Cell::Empty, Cell::Empty,
-					Cell::Occupied(Piece {is_player: true, is_master: false}),
+					Cell::Occupied(Piece {player: 1, is_master: false}),
 				],
 				vec![
-					Cell::Occupied(Piece {is_player: false, is_master: false}),
+					Cell::Occupied(Piece {player: 2, is_master: false}),
 					Cell::Empty, Cell::Empty, Cell::Empty,
-					Cell::Occupied(Piece {is_player: true, is_master: false}),
+					Cell::Occupied(Piece {player: 1, is_master: false}),
 				],
 				vec![
-					Cell::Occupied(Piece {is_player: false, is_master: true}),
+					Cell::Occupied(Piece {player: 2, is_master: true}),
 					Cell::Empty, Cell::Empty, Cell::Empty,
-					Cell::Occupied(Piece {is_player: true, is_master: true}),
+					Cell::Occupied(Piece {player: 1, is_master: true}),
 				],
 				vec![
-					Cell::Occupied(Piece {is_player: false, is_master: false}),
+					Cell::Occupied(Piece {player: 2, is_master: false}),
 					Cell::Empty, Cell::Empty, Cell::Empty,
-					Cell::Occupied(Piece {is_player: true, is_master: false}),
+					Cell::Occupied(Piece {player: 1, is_master: false}),
 				],
 				vec![
-					Cell::Occupied(Piece {is_player: false, is_master: false}),
+					Cell::Occupied(Piece {player: 2, is_master: false}),
 					Cell::Empty, Cell::Empty, Cell::Empty,
-					Cell::Occupied(Piece {is_player: true, is_master: false}),
+					Cell::Occupied(Piece {player: 1, is_master: false}),
 				],
 			]
 		}
@@ -55,12 +55,12 @@ impl Field {
 		return &self.cells[position.x as usize][position.y as usize];
 	}
 
-	pub fn get_all_pieces(&self, is_player: bool) -> Vec<(Piece, Position)> {
+	pub fn get_all_pieces(&self, player: usize) -> Vec<(Piece, Position)> {
 		let mut pieces: Vec<(Piece, Position)> = Vec::new();
 		for position in Field::get_all_positions() {
 			let cell: &Cell = self.get_cell(&position);
 			if let Cell::Occupied(piece) = cell {
-				if piece.is_player == is_player {
+				if piece.player == player {
 					pieces.push((piece.clone(), position))
 				}
 			}

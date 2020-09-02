@@ -4,11 +4,11 @@ use crate::card::Card;
 
 pub struct Player {
 	pub name: String,
-	pub cards: (Card, Card),
+	pub cards: [Card; 2],
 }
 
 impl fmt::Display for Player {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{}: {}, {}\n", self.name, self.cards.0, self.cards.1)
+		write!(f, "{}: {}, {}\n", self.name, self.cards[0], self.cards[1])
 	}
 }
