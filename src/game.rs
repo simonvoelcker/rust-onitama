@@ -32,9 +32,13 @@ impl Game {
 			for (card_index, card) in cards.iter().enumerate() {
 				for offset in card.moves.iter() {
 					let target_position = position.offset(&offset);
-					if target_position.in_field() {
-						options.push((Position {x: position.x, y: position.y}, card_index, target_position));
+					if !target_position.in_field() {
+					    continue;
 					}
+					if self.field.occupied_by(&target_position, self.current_player) {
+					    continue;
+					}
+                    options.push((Position {x: position.x, y: position.y}, card_index, target_position));
 				}
 			}
 		}

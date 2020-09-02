@@ -19,11 +19,10 @@ impl Field {
 				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
 			]
 		};
-		// for col in 0..5 {
-        //     field.cells[col][0] = Cell::Occupied(Piece {player: 2, is_master: col == 2});
-        //     field.cells[col][4] = Cell::Occupied(Piece {player: 1, is_master: col == 2});
-		// }
-		field.cells[2][2] = Cell::Occupied(Piece {player: 0, is_master: true});
+		for col in 0..5 {
+            field.cells[col][0] = Cell::Occupied(Piece {player: 0, is_master: col == 2});
+            field.cells[col][4] = Cell::Occupied(Piece {player: 1, is_master: col == 2});
+		}
 		field
 	}
 
@@ -39,6 +38,14 @@ impl Field {
 
 	pub fn get_cell(&self, position: &Position) -> &Cell {
 		return &self.cells[position.x as usize][position.y as usize];
+	}
+
+	pub fn occupied_by(&self, position: &Position, player: usize) -> bool {
+        let cell: &Cell = self.get_cell(&position);
+        if let Cell::Occupied(piece) = cell {
+            return piece.player == player
+        }
+        false
 	}
 
 	pub fn get_all_pieces(&self, player: usize) -> Vec<(Piece, Position)> {
