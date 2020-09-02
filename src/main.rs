@@ -4,11 +4,13 @@ mod piece;
 mod position;
 mod card;
 mod game;
+mod player;
 
 use rand::seq::SliceRandom;
 
 use game::Game;
 use card::Card;
+use player::Player;
 
 fn main() {
 
@@ -16,13 +18,12 @@ fn main() {
 	let mut rng = &mut rand::thread_rng();	
 	cards.shuffle(&mut rng);
 
-	let game = Game::new((
-		cards.pop().expect(""),
-		cards.pop().expect(""),
-		cards.pop().expect(""),
-		cards.pop().expect(""),
-		cards.pop().expect(""),
-	));
+	let players: (Player, Player) = (
+		Player {name: "Player 1".to_string(), cards: (cards.pop().expect(""), cards.pop().expect(""))},
+		Player {name: "Player 2".to_string(), cards: (cards.pop().expect(""), cards.pop().expect(""))},
+	);
+
+	let game = Game::new(players, cards.pop().expect(""));
     println!("{}", game);
 
     // let all_pieces = &field.get_all_pieces(true);

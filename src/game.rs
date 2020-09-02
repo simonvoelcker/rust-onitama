@@ -1,21 +1,22 @@
 use std::fmt;
 use crate::field::Field;
 use crate::card::Card;
+use crate::player::Player;
 
 
 pub struct Game {
 	pub field: Field,
-	pub player_cards: ((Card, Card), (Card, Card)),
+	pub players: (Player, Player),
 	pub public_card: Card,
 	pub current_player: u8,
 }
 
 impl Game {
-	pub fn new(cards: (Card, Card, Card, Card, Card)) -> Self {
+	pub fn new(players: (Player, Player), public_card: Card) -> Self {
 		Self {
 			field: Field::new(),
-			player_cards: ((cards.0, cards.1), (cards.2, cards.3)),
-			public_card: cards.4,
+			players,
+			public_card,
 			current_player: 1,
 		}
 	}
@@ -34,7 +35,7 @@ impl Game {
 
 impl fmt::Display for Game {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "\nPlayer 2: {}, {}\n\n", (self.player_cards.1).0, (self.player_cards.1).1)?;
+		write!(f, "\n{}\n", self.players.1)?;
 		if self.current_player == 2 {
 			write!(f, "Public: {}\n", self.public_card)?;
 		}
@@ -42,6 +43,6 @@ impl fmt::Display for Game {
 		if self.current_player == 1 {
 			write!(f, "Public: {}\n", self.public_card)?;
 		}
-		write!(f, "Player 1: {}, {}\n\n", (self.player_cards.0).0, (self.player_cards.0).1)
+		write!(f, "{}\n", self.players.0)
 	}
 }
