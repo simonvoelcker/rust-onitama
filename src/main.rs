@@ -11,6 +11,7 @@ use rand::seq::SliceRandom;
 use game::Game;
 use card::Card;
 use player::Player;
+use position::Position;
 
 fn main() {
 
@@ -26,12 +27,9 @@ fn main() {
 	let game = Game::new(players, cards.pop().expect(""));
     println!("{}", game);
 
-    // let all_pieces = &field.get_all_pieces(true);
-    // for (piece, position) in all_pieces.iter() {
-	//     println!("Piece {} @ {}", piece, position);
-	//     let all_moves = &field.get_all_moves(&piece, &position, &cards[0]);
-	//     for target in all_moves.iter() {
-	//     	println!("    Target {}", target);
-	//     }
-    // }
+    let options: Vec<(Position, usize, Position)> = game.get_all_options();
+    for (position, card_index, target_position) in options.iter() {
+    	let card: &Card = &game.players[game.current_player-1].cards[*card_index];
+	    println!("Option: {} -> {} (using {})", position, target_position, card);
+    }
 }
