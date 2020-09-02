@@ -2,7 +2,7 @@ use std::fmt;
 use crate::field::Field;
 use crate::card::Card;
 use crate::player::Player;
-use crate::position::Position;
+use crate::position::{Offset, Position};
 use crate::piece::Piece;
 
 
@@ -15,11 +15,12 @@ pub struct Game {
 
 impl Game {
 	pub fn new(players: [Player; 2], public_card: Card) -> Self {
+		let player_0_starts = players[0].name.starts_with(&public_card.color);
 		Self {
 			field: Field::new(),
 			players,
 			public_card,
-			current_player: 0,
+			current_player: if player_0_starts {0} else {1},
 		}
 	}
 
@@ -31,7 +32,12 @@ impl Game {
 		for (_piece, position) in pieces.iter() {
 			for (card_index, card) in cards.iter().enumerate() {
 				for offset in card.moves.iter() {
-					let target_position = position.offset(&offset);
+				    let player_offset = if self.current_player == 0 {
+                        Offset {x: offset.x, y: offset.y}
+				    } else {
+                        Offset {x: -offset.x, y: -offset.y}
+				    };
+					let target_position = position.offset(&player_offset);
 					if !target_position.in_field() {
 					    continue;
 					}
@@ -48,11 +54,11 @@ impl Game {
 
 impl fmt::Display for Game {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "\n{}\n", self.players[1])?;
+		write!(f, "\n{}", self.players[1])?;
 		if self.current_player == 1 {
 			write!(f, "Public: {}\n", self.public_card)?;
 		}
-		write!(f, "{}", self.field)?;
+		write!(f, "\n{}", self.field)?;
 		if self.current_player == 0 {
 			write!(f, "Public: {}\n", self.public_card)?;
 		}

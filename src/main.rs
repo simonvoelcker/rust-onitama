@@ -20,8 +20,8 @@ fn main() {
 	cards.shuffle(&mut rng);
 
 	let players: [Player; 2] = [
-		Player {name: "Player 1".to_string(), cards: [cards.pop().expect(""), cards.pop().expect("")]},
-		Player {name: "Player 2".to_string(), cards: [cards.pop().expect(""), cards.pop().expect("")]},
+		Player {name: "Blue player".to_string(), cards: [cards.pop().expect(""), cards.pop().expect("")]},
+		Player {name: "Red player".to_string(), cards: [cards.pop().expect(""), cards.pop().expect("")]},
 	];
 
 	let game = Game::new(players, cards.pop().expect(""));

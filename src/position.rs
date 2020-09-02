@@ -9,7 +9,7 @@ impl Position {
 	pub fn offset(&self, offset: &Offset) -> Position {
 		Position {
 			x: self.x + offset.x,
-			y: self.y + offset.y
+			y: self.y + offset.y,
 		}
 	}
 
