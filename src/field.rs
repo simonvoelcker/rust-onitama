@@ -68,31 +68,20 @@ impl Field {
 		}
 		pieces
 	}
-
-	pub fn get_all_moves(&self, piece: &Piece, position: &Position, card: &Card) -> Vec<Position> {
-		let mut targets: Vec<Position> = Vec::new();
-		for offset in card.moves.iter() {
-			let target = position.offset(&offset);
-			if target.in_field() {
-				targets.push(target)
-			}
-		}
-		targets
-	}
 }
 
 impl fmt::Display for Field {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "    -----------\n").expect("");
+		write!(f, "    -----------\n")?;
 		for y in 0..5 {
-			write!(f, "{}  | ", 5-y).expect("");
+			write!(f, "{}  | ", 5-y)?;
 			for x in 0..5 {
 				let cell: &Cell = self.get_cell(&Position { x, y });
-				write!(f, "{} ", cell).expect("");
+				write!(f, "{} ", cell)?;
 			}
-			write!(f, "|\n").expect("");
+			write!(f, "|\n")?;
 		}
-		write!(f, "    -----------\n").expect("");
+		write!(f, "    -----------\n")?;
 		write!(f, "     A B C D E\n\n")
 	}
 }
