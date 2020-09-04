@@ -5,7 +5,6 @@ use crate::player::Player;
 use crate::position::{Offset, Position};
 use crate::piece::Piece;
 use crate::move_option::MoveOption;
-use crate::cell::Cell;
 
 
 pub struct Game {
@@ -55,9 +54,9 @@ impl Game {
 
 	pub fn make_move(&mut self, option: &MoveOption) {
 		// move piece
-		let piece = self.field.get_cell(&option.from_position).clone();
-	    self.field.set_cell(&option.target_position, piece);
-	    self.field.set_cell(&option.from_position, Cell::Empty);
+		let piece: Option<Piece> = self.field.get_piece(&option.from_position).clone();
+	    self.field.set_piece(&option.target_position, piece);
+	    self.field.set_piece(&option.from_position, None);
 
 	    // move cards around
 	    let player_cards = &self.players[self.current_player].cards;

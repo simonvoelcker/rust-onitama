@@ -1,27 +1,26 @@
 use std::fmt;
-use crate::cell::Cell;
 use crate::piece::Piece;
 use crate::position::Position;
 
 
 pub struct Field {
-	pub cells: Vec<Vec<Cell>>
+	pub pieces: Vec<Vec<Option<Piece>>>
 }
 
 impl Field {
 	pub fn new() -> Self {
 		let mut field = Self {
-			cells: vec![
-				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
-				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
-				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
-				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
-				vec![Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty, Cell::Empty],
+			pieces: vec![
+				vec![None, None, None, None, None],
+				vec![None, None, None, None, None],
+				vec![None, None, None, None, None],
+				vec![None, None, None, None, None],
+				vec![None, None, None, None, None],
 			]
 		};
 		for col in 0..5 {
-            field.cells[col][0] = Cell::Occupied(Piece {player: 0, is_master: col == 2});
-            field.cells[col][4] = Cell::Occupied(Piece {player: 1, is_master: col == 2});
+            field.pieces[col][0] = Some(Piece {player: 0, is_master: col == 2});
+            field.pieces[col][4] = Some(Piece {player: 1, is_master: col == 2});
 		}
 		field
 	}
@@ -36,18 +35,17 @@ impl Field {
 		positions
 	}
 
-	pub fn get_cell(&self, position: &Position) -> &Cell {
-		return &self.cells[position.x as usize][position.y as usize];
+	pub fn get_piece(&self, position: &Position) -> &Option<Piece> {
+		return &self.pieces[position.x as usize][position.y as usize];
 	}
 
-	pub fn set_cell(&mut self, position: &Position, cell: Cell) {
-	    self.cells[position.x as usize][position.y as usize] = cell;
+	pub fn set_piece(&mut self, position: &Position, piece: Option<Piece>) {
+	    self.pieces[position.x as usize][position.y as usize] = piece;
 	}
 
 	pub fn occupied_by(&self, position: &Position, player: usize) -> bool {
-        let cell: &Cell = self.get_cell(&position);
-        if let Cell::Occupied(piece) = cell {
-            return piece.player == player
+        if let Some(piece) = self.get_piece(&position) {
+        	return piece.player == player;
         }
         false
 	}
@@ -55,25 +53,29 @@ impl Field {
 	pub fn get_all_pieces(&self, player: usize) -> Vec<(Piece, Position)> {
 		let mut pieces: Vec<(Piece, Position)> = Vec::new();
 		for position in Field::get_all_positions() {
-			let cell: &Cell = self.get_cell(&position);
-			if let Cell::Occupied(piece) = cell {
-				if piece.player == player {
-					pieces.push((piece.clone(), position))
-				}
-			}
+	        match self.get_piece(&position) {
+	        	Some(piece) => {
+					if piece.player == player {
+						pieces.push((piece.clone(), position))
+					}
+	        	},
+        		None => {()},
+	        };
 		}
 		pieces
 	}
 
 	pub fn get_master_position(&self, player: usize) -> Option<Position> {
 		for position in Field::get_all_positions() {
-			let cell: &Cell = self.get_cell(&position);
-			if let Cell::Occupied(piece) = cell {
-				if piece.player == player && piece.is_master {
-					return Some(position);
-				}
-			}
-		}
+	        match self.get_piece(&position) {
+	        	Some(piece) => {
+					if piece.player == player && piece.is_master {
+						return Some(position);
+					}
+	        	},
+        		None => {()},
+	        };
+	    }
 		None
 	}
 }
@@ -84,8 +86,11 @@ impl fmt::Display for Field {
 		for y in 0..5 {
 			write!(f, "{}  | ", 5-y)?;
 			for x in 0..5 {
-				let cell: &Cell = self.get_cell(&Position { x: x, y: 4-y });
-				write!(f, "{} ", cell)?;
+				let piece: &Option<Piece> = self.get_piece(&Position { x: x, y: 4-y });
+				match piece {
+					Some(piece) => {write!(f, "{} ", piece)?},
+					None => {write!(f, "- ")?},
+				};
 			}
 			write!(f, "|\n")?;
 		}

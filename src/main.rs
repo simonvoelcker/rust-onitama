@@ -1,5 +1,4 @@
 mod field;
-mod cell;
 mod piece;
 mod position;
 mod card;
