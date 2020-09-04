@@ -4,23 +4,15 @@ use crate::position::Position;
 
 
 pub struct Field {
-	pub pieces: Vec<Vec<Option<Piece>>>
+	pub pieces: [Option<Piece>; 25],
 }
 
 impl Field {
 	pub fn new() -> Self {
-		let mut field = Self {
-			pieces: vec![
-				vec![None, None, None, None, None],
-				vec![None, None, None, None, None],
-				vec![None, None, None, None, None],
-				vec![None, None, None, None, None],
-				vec![None, None, None, None, None],
-			]
-		};
+		let mut field = Self {pieces: Default::default()};
 		for col in 0..5 {
-            field.pieces[col][0] = Some(Piece {player: 0, is_master: col == 2});
-            field.pieces[col][4] = Some(Piece {player: 1, is_master: col == 2});
+            field.set_piece(&Position {x: col, y: 0}, Some(Piece {player: 0, is_master: col == 2}));
+            field.set_piece(&Position {x: col, y: 4}, Some(Piece {player: 1, is_master: col == 2}));
 		}
 		field
 	}
@@ -36,11 +28,11 @@ impl Field {
 	}
 
 	pub fn get_piece(&self, position: &Position) -> &Option<Piece> {
-		return &self.pieces[position.x as usize][position.y as usize];
+		return &self.pieces[position.field_index()];
 	}
 
 	pub fn set_piece(&mut self, position: &Position, piece: Option<Piece>) {
-	    self.pieces[position.x as usize][position.y as usize] = piece;
+	    self.pieces[position.field_index()] = piece;
 	}
 
 	pub fn occupied_by(&self, position: &Position, player: usize) -> bool {

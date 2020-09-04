@@ -17,6 +17,10 @@ impl Position {
 	pub fn in_field(&self) -> bool {
 		self.x >= 0 && self.x < 5 && self.y >= 0 && self.y < 5
 	}
+
+	pub fn field_index(&self) -> usize {
+		(self.y * 5 + self.x) as usize
+	}
 }
 
 impl fmt::Display for Position {

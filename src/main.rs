@@ -36,11 +36,17 @@ fn main() {
 		    println!("Option {:2}: {}", option_index+1, option);
 	    }
 
-	    print!("Choose option: ");
-	    io::stdout().flush().unwrap();
-	    let mut input = String::new();
-	    io::stdin().read_line(&mut input).unwrap();
-	    let choice: usize = input.trim().parse().unwrap();
+	    let mut choice = 0;
+	    while choice < 1 || choice > options.len() {
+		    print!("Choose option: ");
+		    io::stdout().flush().unwrap();
+		    let mut input = String::new();
+		    io::stdin().read_line(&mut input).unwrap();
+		    match input.trim().parse() {
+		    	Ok(num) => {choice = num},
+		    	Err(_) => {choice = 0},
+		    };
+	    }
 
 	    game.make_move(&options[choice-1]);
 	}
