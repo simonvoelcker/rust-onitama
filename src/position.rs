@@ -21,6 +21,13 @@ impl Position {
 	pub fn field_index(&self) -> usize {
 		(self.y * 5 + self.x) as usize
 	}
+
+	pub fn from_field_index(field_index: usize) -> Position {
+		Position {
+			x: (field_index % 5) as isize,
+			y: (field_index / 5) as isize,
+		}
+	}
 }
 
 impl fmt::Display for Position {

@@ -5,7 +5,7 @@ use crate::position::Offset;
 pub struct Card {
 	pub name: String,
 	pub color: String,
-	pub moves: Vec<Offset>
+	pub moves: Vec<Offset>,
 }
 
 impl Card {

@@ -17,16 +17,6 @@ impl Field {
 		field
 	}
 
-	pub fn get_all_positions() -> Vec<Position> {
-		let mut positions: Vec<Position> = Vec::new();
-		for x in 0..5 {
-			for y in 0..5 {
-				positions.push(Position { x, y })
-			}
-		}
-		positions
-	}
-
 	pub fn get_piece(&self, position: &Position) -> &Option<Piece> {
 		return &self.pieces[position.field_index()];
 	}
@@ -44,30 +34,24 @@ impl Field {
 
 	pub fn get_all_pieces(&self, player: usize) -> Vec<(Piece, Position)> {
 		let mut pieces: Vec<(Piece, Position)> = Vec::new();
-		for position in Field::get_all_positions() {
-	        match self.get_piece(&position) {
-	        	Some(piece) => {
-					if piece.player == player {
-						pieces.push((piece.clone(), position))
-					}
-	        	},
-        		None => {()},
-	        };
+		for field_index in 0..25 {
+	        if let Some(piece) = &self.pieces[field_index] {
+				if piece.player == player {
+					pieces.push((piece.clone(), Position::from_field_index(field_index)));
+				}
+	        }
 		}
 		pieces
 	}
 
 	pub fn get_master_position(&self, player: usize) -> Option<Position> {
-		for position in Field::get_all_positions() {
-	        match self.get_piece(&position) {
-	        	Some(piece) => {
-					if piece.player == player && piece.is_master {
-						return Some(position);
-					}
-	        	},
-        		None => {()},
-	        };
-	    }
+		for field_index in 0..25 {
+	        if let Some(piece) = &self.pieces[field_index] {
+				if piece.player == player && piece.is_master {
+					return Some(Position::from_field_index(field_index));
+				}
+	        }
+		}
 		None
 	}
 }
