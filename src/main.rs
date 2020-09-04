@@ -33,8 +33,12 @@ fn main() {
 
 	    let options: Vec<MoveOption> = game.get_all_options();
 	    for (option_index, option) in options.iter().enumerate() {
-	    	let score = game.evaluate_move(&option, 5);
-		    println!("Option {:2}: {} (Score: {})", option_index+1, option, score);
+	    	if game.current_player == 1 {
+		    	let score = game.evaluate_move(&option, 5);
+			    println!("Option {:2}: {} (Score: {:.2})", option_index+1, option, score);
+	    	} else {
+			    println!("Option {:2}: {}", option_index+1, option);
+	    	}
 	    }
 
 	    let mut choice = 0;

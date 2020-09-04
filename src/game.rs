@@ -128,16 +128,20 @@ impl Game {
 			GameResult::Undecided => {
 				if depth > 0 {
 					let mut max_score = 0.0;
-				    for option in self.get_all_options().iter() {
+					let mut tot_score = 0.0;
+					let all_options = self.get_all_options();
+				    for option in all_options.iter() {
 				    	let option_score = self.evaluate_move(&option, depth-1);
 						if option_score > max_score {
 							max_score = option_score;
 						}
-						if max_score == 1.0 {
-							break;
-						}
+						tot_score += option_score;
 				    }
-				    score = 1.0 - max_score;
+				    if max_score == 1.0 {
+				    	score = 0.0;
+				    } else {
+				    	score = 1.0 - tot_score / all_options.len() as f64;
+				    }
 				}
 			}
 		};
