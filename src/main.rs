@@ -28,19 +28,21 @@ fn main() {
 	];
 
 	let mut game = Game::new(players, cards.pop().expect(""));
-    println!("{}", game);
 
-    let options: Vec<MoveOption> = game.get_all_options();
-    for (option_index, option) in options.iter().enumerate() {
-	    println!("Option {:2}: {}", option_index+1, option);
-    }
+	while !game.is_over() {
+	    println!("{}", game);
 
-    print!("Choose option: ");
-    io::stdout().flush().unwrap();
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
-    let choice: usize = input.trim().parse().unwrap();
+	    let options: Vec<MoveOption> = game.get_all_options();
+	    for (option_index, option) in options.iter().enumerate() {
+		    println!("Option {:2}: {}", option_index+1, option);
+	    }
 
-    game.make_move(&options[choice-1]);
-    println!("{}", game);
+	    print!("Choose option: ");
+	    io::stdout().flush().unwrap();
+	    let mut input = String::new();
+	    io::stdin().read_line(&mut input).unwrap();
+	    let choice: usize = input.trim().parse().unwrap();
+
+	    game.make_move(&options[choice-1]);
+	}
 }

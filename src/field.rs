@@ -64,6 +64,18 @@ impl Field {
 		}
 		pieces
 	}
+
+	pub fn get_master_position(&self, player: usize) -> Option<Position> {
+		for position in Field::get_all_positions() {
+			let cell: &Cell = self.get_cell(&position);
+			if let Cell::Occupied(piece) = cell {
+				if piece.player == player && piece.is_master {
+					return Some(position);
+				}
+			}
+		}
+		None
+	}
 }
 
 impl fmt::Display for Field {

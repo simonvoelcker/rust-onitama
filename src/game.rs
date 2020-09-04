@@ -68,6 +68,24 @@ impl Game {
 	    // change active player
 	    self.current_player = 1-self.current_player;
 	}
+
+	pub fn is_over(&self) -> bool {
+		for (player_index, player) in self.players.iter().enumerate() {
+			match self.field.get_master_position(player_index) {
+				Some(position) => {
+					if position.x == 2 && position.y == (1-player_index as isize) * 4 {
+						println!("Game over. {}'s master has reached the opponent base", player.name);
+						return true
+					}
+				},
+				None => {
+					println!("Game over. {}'s master has fallen", player.name);
+					return true
+				},
+			};
+		}
+		false
+	}
 }
 
 impl fmt::Display for Game {
