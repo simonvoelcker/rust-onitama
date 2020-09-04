@@ -10,7 +10,7 @@ use std::io;
 use std::io::Write;
 use rand::seq::SliceRandom;
 
-use game::Game;
+use game::{Game, GameResult};
 use card::Card;
 use player::Player;
 use move_option::MoveOption;
@@ -28,7 +28,7 @@ fn main() {
 
 	let mut game = Game::new(players, cards.pop().expect(""));
 
-	while !game.is_over() {
+	loop {
 	    println!("{}", game);
 
 	    let options: Vec<MoveOption> = game.get_all_options();
@@ -49,5 +49,10 @@ fn main() {
 	    }
 
 	    game.make_move(&options[choice-1]);
+
+	    if let GameResult::DecidedWithWinner(winning_player) = game.get_result() {
+	    	println!("Player {} won the game!", winning_player);
+	    	break;
+	    }
 	}
 }

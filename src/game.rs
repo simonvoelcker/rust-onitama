@@ -14,6 +14,11 @@ pub struct Game {
 	pub current_player: usize,
 }
 
+pub enum GameResult {
+	DecidedWithWinner(usize),
+	Undecided,
+}
+
 impl Game {
 	pub fn new(players: [Player; 2], public_card: Card) -> Self {
 		let player_0_starts = players[0].name.starts_with(&public_card.color);
@@ -95,23 +100,31 @@ impl Game {
 	    self.field.set_piece(&option.target_position, option.target_piece.clone());
 	}
 
-	pub fn is_over(&self) -> bool {
+	pub fn get_result(&self) -> GameResult {
 		for (player_index, player) in self.players.iter().enumerate() {
 			match self.field.get_master_position(player_index) {
 				Some(position) => {
 					if position.x == 2 && position.y == (1-player_index as isize) * 4 {
 						println!("Game over. {}'s master has reached the opponent base", player.name);
-						return true
+						return GameResult::DecidedWithWinner(player_index);
 					}
 				},
 				None => {
 					println!("Game over. {}'s master has fallen", player.name);
-					return true
+					return GameResult::DecidedWithWinner(1-player_index);
 				},
 			};
 		}
-		false
+		GameResult::Undecided
 	}
+
+	//pub fn evaluate_move(&mut self, option: &MoveOption) -> f64 {
+	//	self.make_move(option);
+//
+//	//    let options: Vec<MoveOption> = self.get_all_options();
+//
+//	//	self.undo_move(option);
+	//}
 }
 
 impl fmt::Display for Game {
