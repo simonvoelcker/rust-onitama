@@ -50,6 +50,7 @@ impl Game {
                     	card: card.clone(),
                     	target_position: target_position.clone(),
                     	target_piece: self.field.get_piece(&target_position).clone(),
+                    	public_card: self.public_card.clone(),
                     });
 				}
 			}
@@ -63,14 +64,35 @@ impl Game {
 	    self.field.set_piece(&option.target_position, piece);
 	    self.field.set_piece(&option.from_position, None);
 
-	    // move cards around
-	    let player_cards = &self.players[self.current_player].cards;
-	    let card_index: usize = if player_cards[0].name == option.card.name {0} else {1};
-	    self.players[self.current_player].cards[card_index] = self.public_card.clone();
+	    // move cards
+	    if self.players[self.current_player].cards[0] == option.card {
+		    self.players[self.current_player].cards[0] = self.public_card.clone();
+	    } else {
+		    self.players[self.current_player].cards[1] = self.public_card.clone();
+	    }
 	    self.public_card = option.card.clone();
 
 	    // change active player
 	    self.current_player = 1-self.current_player;
+	}
+
+	pub fn undo_move(&mut self, option: &MoveOption) {
+	    // change active player
+	    self.current_player = 1-self.current_player;
+
+	    // move cards back
+	    if self.players[self.current_player].cards[0] == option.public_card {
+		    self.public_card = self.players[self.current_player].cards[0].clone();
+		    self.players[self.current_player].cards[0] = option.card.clone();
+	    } else {
+		    self.public_card = self.players[self.current_player].cards[1].clone();
+		    self.players[self.current_player].cards[1] = option.card.clone();
+	    }
+
+		// move pieces back
+		let piece: Option<Piece> = self.field.get_piece(&option.target_position).clone();
+	    self.field.set_piece(&option.from_position, piece);
+	    self.field.set_piece(&option.target_position, option.target_piece.clone());
 	}
 
 	pub fn is_over(&self) -> bool {

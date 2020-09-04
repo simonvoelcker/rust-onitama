@@ -100,3 +100,9 @@ impl fmt::Display for Card {
 		write!(f, "{}", self.name)
 	}
 }
+
+impl std::cmp::PartialEq for Card {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
+}
