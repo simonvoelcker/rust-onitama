@@ -105,12 +105,10 @@ impl Game {
 			match self.field.get_master_position(player_index) {
 				Some(position) => {
 					if position.x == 2 && position.y == (1-player_index as isize) * 4 {
-						println!("Game over. {}'s master has reached the opponent base", player.name);
 						return GameResult::DecidedWithWinner(player_index);
 					}
 				},
 				None => {
-					println!("Game over. {}'s master has fallen", player.name);
 					return GameResult::DecidedWithWinner(1-player_index);
 				},
 			};
@@ -118,13 +116,35 @@ impl Game {
 		GameResult::Undecided
 	}
 
-	//pub fn evaluate_move(&mut self, option: &MoveOption) -> f64 {
-	//	self.make_move(option);
-//
-//	//    let options: Vec<MoveOption> = self.get_all_options();
-//
-//	//	self.undo_move(option);
-	//}
+	pub fn evaluate_move(&mut self, option: &MoveOption, depth: usize) -> f64 {
+		self.make_move(option);
+		let mut score = 0.5;
+
+		match self.get_result() {
+			GameResult::DecidedWithWinner(winning_player) => {
+				// move was made -> current player is OPPONENT
+				score = if self.current_player == winning_player {0.0} else {1.0}
+			},
+			GameResult::Undecided => {
+				if depth > 0 {
+					let mut max_score = 0.0;
+				    for option in self.get_all_options().iter() {
+				    	let option_score = self.evaluate_move(&option, depth-1);
+						if option_score > max_score {
+							max_score = option_score;
+						}
+						if max_score == 1.0 {
+							break;
+						}
+				    }
+				    score = 1.0 - max_score;
+				}
+			}
+		};
+
+		self.undo_move(option);
+		score
+	}
 }
 
 impl fmt::Display for Game {
