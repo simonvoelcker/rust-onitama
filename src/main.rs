@@ -5,16 +5,16 @@ mod position;
 mod card;
 mod game;
 mod player;
-mod moveOption;
+mod move_option;
 
 use std::io;
+use std::io::Write;
 use rand::seq::SliceRandom;
 
 use game::Game;
 use card::Card;
 use player::Player;
-use position::Position;
-use moveOption::MoveOption;
+use move_option::MoveOption;
 
 fn main() {
 
@@ -35,7 +35,8 @@ fn main() {
 	    println!("Option {:2}: {}", option_index+1, option);
     }
 
-    println!("Choose option:");
+    print!("Choose option: ");
+    io::stdout().flush().unwrap();
     let mut input = String::new();
     io::stdin().read_line(&mut input).unwrap();
     let choice: usize = input.trim().parse().unwrap();

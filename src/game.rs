@@ -4,8 +4,7 @@ use crate::card::Card;
 use crate::player::Player;
 use crate::position::{Offset, Position};
 use crate::piece::Piece;
-use crate::cell::Cell;
-use crate::moveOption::MoveOption;
+use crate::move_option::MoveOption;
 
 
 pub struct Game {
@@ -32,7 +31,7 @@ impl Game {
 		
 		let mut options: Vec<MoveOption> = Vec::new();
 		for (_piece, position) in pieces.iter() {
-			for (card_index, card) in cards.iter().enumerate() {
+			for card in cards.iter() {
 				for offset in card.moves.iter() {
 				    let player_offset = if self.current_player == 0 {
                         Offset {x: offset.x, y: offset.y}
@@ -46,7 +45,7 @@ impl Game {
 					if self.field.occupied_by(&target_position, self.current_player) {
 					    continue;
 					}
-                    options.push(MoveOption {from_position: position.clone(), card_index, target_position});
+                    options.push(MoveOption {from_position: position.clone(), card: card.clone(), target_position});
 				}
 			}
 		}
