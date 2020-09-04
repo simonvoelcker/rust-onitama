@@ -5,13 +5,16 @@ mod position;
 mod card;
 mod game;
 mod player;
+mod moveOption;
 
+use std::io;
 use rand::seq::SliceRandom;
 
 use game::Game;
 use card::Card;
 use player::Player;
 use position::Position;
+use moveOption::MoveOption;
 
 fn main() {
 
@@ -27,9 +30,16 @@ fn main() {
 	let game = Game::new(players, cards.pop().expect(""));
     println!("{}", game);
 
-    let options: Vec<(Position, usize, Position)> = game.get_all_options();
-    for (position, card_index, target_position) in options.iter() {
-    	let card: &Card = &game.players[game.current_player].cards[*card_index];
-	    println!("Option: {} -> {} (using {})", position, target_position, card);
+    let options: Vec<MoveOption> = game.get_all_options();
+    for (option_index, option) in options.iter().enumerate() {
+	    println!("Option {:2}: {}", option_index+1, option);
     }
+
+    println!("Choose option:");
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).unwrap();
+    let choice: usize = input.trim().parse().unwrap();
+
+    // game.make_move(&options[choice-1]);
+    // println!("{}", game);
 }

@@ -1,5 +1,6 @@
 use std::fmt;
 
+#[derive(Clone)]
 pub struct Position {
 	pub x: isize,
 	pub y: isize
@@ -24,6 +25,7 @@ impl fmt::Display for Position {
 	}
 }
 
+#[derive(Clone)]
 pub struct Offset {
 	pub x: isize,
 	pub y: isize

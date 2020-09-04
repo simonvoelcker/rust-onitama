@@ -40,6 +40,10 @@ impl Field {
 		return &self.cells[position.x as usize][position.y as usize];
 	}
 
+	pub fn set_cell(mut self, position: &Position, cell: Cell) {
+	    self.cells[position.x as usize][position.y as usize] = cell;
+	}
+
 	pub fn occupied_by(&self, position: &Position, player: usize) -> bool {
         let cell: &Cell = self.get_cell(&position);
         if let Cell::Occupied(piece) = cell {
