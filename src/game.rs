@@ -5,6 +5,7 @@ use crate::player::Player;
 use crate::position::{Offset, Position};
 use crate::piece::Piece;
 use crate::move_option::MoveOption;
+use crate::cell::Cell;
 
 
 pub struct Game {
@@ -52,10 +53,10 @@ impl Game {
 		options
 	}
 
-	// pub fn make_move(&self, option: &(Position, usize, Position)) {
-	//     let position = &option.0;
-	//     self.field.set_cell(position, Cell::Empty);
-	// }
+	pub fn make_move(&mut self, option: &MoveOption) {
+	    let position = &option.from_position;
+	    self.field.set_cell(position, Cell::Empty);
+	}
 }
 
 impl fmt::Display for Game {

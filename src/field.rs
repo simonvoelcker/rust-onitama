@@ -40,7 +40,7 @@ impl Field {
 		return &self.cells[position.x as usize][position.y as usize];
 	}
 
-	pub fn set_cell(mut self, position: &Position, cell: Cell) {
+	pub fn set_cell(&mut self, position: &Position, cell: Cell) {
 	    self.cells[position.x as usize][position.y as usize] = cell;
 	}
 

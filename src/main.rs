@@ -27,7 +27,7 @@ fn main() {
 		Player {name: "Red player".to_string(), cards: [cards.pop().expect(""), cards.pop().expect("")]},
 	];
 
-	let game = Game::new(players, cards.pop().expect(""));
+	let mut game = Game::new(players, cards.pop().expect(""));
     println!("{}", game);
 
     let options: Vec<MoveOption> = game.get_all_options();
@@ -41,6 +41,6 @@ fn main() {
     io::stdin().read_line(&mut input).unwrap();
     let choice: usize = input.trim().parse().unwrap();
 
-    // game.make_move(&options[choice-1]);
-    // println!("{}", game);
+    game.make_move(&options[choice-1]);
+    println!("{}", game);
 }
