@@ -54,8 +54,19 @@ impl Game {
 	}
 
 	pub fn make_move(&mut self, option: &MoveOption) {
-	    let position = &option.from_position;
-	    self.field.set_cell(position, Cell::Empty);
+		// move piece
+		let piece = self.field.get_cell(&option.from_position).clone();
+	    self.field.set_cell(&option.target_position, piece);
+	    self.field.set_cell(&option.from_position, Cell::Empty);
+
+	    // move cards around
+	    let player_cards = &self.players[self.current_player].cards;
+	    let card_index: usize = if player_cards[0].name == option.card.name {0} else {1};
+	    self.players[self.current_player].cards[card_index] = self.public_card.clone();
+	    self.public_card = option.card.clone();
+
+	    // change active player
+	    self.current_player = 1-self.current_player;
 	}
 }
 

@@ -1,7 +1,7 @@
 use std::fmt;
 use crate::piece::Piece;
 
-
+#[derive(Clone)]
 pub enum Cell {
 	Empty,
 	Occupied(Piece)
