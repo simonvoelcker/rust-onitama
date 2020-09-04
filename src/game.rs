@@ -45,7 +45,12 @@ impl Game {
 					if self.field.occupied_by(&target_position, self.current_player) {
 					    continue;
 					}
-                    options.push(MoveOption {from_position: position.clone(), card: card.clone(), target_position});
+                    options.push(MoveOption {
+                    	from_position: position.clone(),
+                    	card: card.clone(),
+                    	target_position: target_position.clone(),
+                    	target_piece: self.field.get_piece(&target_position).clone(),
+                    });
 				}
 			}
 		}
