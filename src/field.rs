@@ -44,6 +44,16 @@ impl Field {
 		pieces
 	}
 
+	pub fn get_piece_balance(&self, player: usize) -> isize {
+		let mut balance: isize = 0;
+		for field_index in 0..25 {
+	        if let Some(piece) = &self.pieces[field_index] {
+				balance += if piece.player == player {1} else {-1};
+	        }
+		}
+		balance
+	}
+
 	pub fn get_master_position(&self, player: usize) -> Option<Position> {
 		for field_index in 0..25 {
 	        if let Some(piece) = &self.pieces[field_index] {

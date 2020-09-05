@@ -138,11 +138,11 @@ impl Game {
 						}
 						tot_score += option_score;
 				    }
-				    if max_score == 1.0 {
-				    	score = 0.0;
-				    } else {
-				    	score = 1.0 - tot_score / all_options.len() as f64;
-				    }
+			    	score = 1.0 - tot_score / all_options.len() as f64;
+				} else {
+					// score based on piece balance
+					let balance = self.field.get_piece_balance(1-self.current_player);
+					score = 0.5 + (balance as f64) / 10.0;
 				}
 			}
 		};

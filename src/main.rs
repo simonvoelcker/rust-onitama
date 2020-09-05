@@ -41,7 +41,7 @@ fn main() {
 	    for (option_index, option) in options.iter().enumerate() {
 	    	if game.current_player == 1 {
 		    	let score = game.evaluate_move(&option, 5);
-			    println!("Option {:2}: {} (Score: {:.2})", option_index+1, option, score);
+			    println!("Option {:2}: {} (Score: {:.3})", option_index+1, option, score);
 	    	} else {
 			    println!("Option {:2}: {}", option_index+1, option);
 	    	}

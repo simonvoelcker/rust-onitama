@@ -36,7 +36,6 @@ impl fmt::Display for Position {
 	}
 }
 
-#[derive(Clone)]
 pub struct Offset {
 	pub x: isize,
 	pub y: isize
