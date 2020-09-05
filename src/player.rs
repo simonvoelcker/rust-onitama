@@ -3,7 +3,7 @@ use std::fmt;
 use crate::card::Card;
 
 pub struct Player {
-	pub name: String,
+	pub name: &'static str,
 	pub cards: [&'static Card; 2],
 }
 

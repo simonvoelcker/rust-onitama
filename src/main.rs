@@ -19,15 +19,20 @@ static CARDS: [Card; 16] = Card::get_all_cards();
 
 fn main() {
 
-	// let mut rng = &mut rand::thread_rng();
-	// cards.shuffle(&mut rng);
+	let mut rng = &mut rand::thread_rng();
+	let mut indices: Vec<usize> = (0..16).collect();
+	indices.shuffle(&mut rng);
+
+	let player1_cards = [&CARDS[indices[0]], &CARDS[indices[1]]];
+	let player2_cards = [&CARDS[indices[2]], &CARDS[indices[3]]];
+	let public_card = &CARDS[indices[4]];
 
 	let players: [Player; 2] = [
-		Player {name: "Blue player".to_string(), cards: [&CARDS[0], &CARDS[1]]},
-		Player {name: "Red player".to_string(), cards: [&CARDS[2], &CARDS[3]]},
+		Player {name: "Blue player", cards: player1_cards},
+		Player {name: "Red player", cards: player2_cards},
 	];
 
-	let mut game = Game::new(players, &CARDS[4]);
+	let mut game = Game::new(players, public_card);
 
 	loop {
 	    println!("{}", game);
