@@ -1,11 +1,11 @@
 use std::fmt;
-use crate::position::Offset;
+use crate::position::*;
 
 #[derive(Clone)]
 pub struct Card {
 	pub name: &'static str,
 	pub color: &'static str,
-	pub moves: [Offset; 4],
+	pub moves: u32,
 }
 
 impl Card {
@@ -14,82 +14,82 @@ impl Card {
 			Card {
 				name: "Affe",
 				color: "Blue",
-				moves: [Offset {x:-1,y:1}, Offset {x:1,y:1}, Offset {x:-1,y:-1}, Offset {x:1,y:-1}]
+				moves: MOVE_FL | MOVE_FR | MOVE_BL | MOVE_BR,
 			},
 			Card {
 				name: "Drache",
 				color: "Red",
-				moves: [Offset {x:-2,y:1}, Offset {x:2,y:1}, Offset {x:-1,y:-1}, Offset {x:1,y:-1}]
+				moves: MOVE_FLL | MOVE_FRR | MOVE_BL | MOVE_BR,
 			},
 			Card {
 				name: "Elefant",
 				color: "Red",
-				moves: [Offset {x:-1,y:1}, Offset {x:1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}]
+				moves: MOVE_FL | MOVE_FR | MOVE_L | MOVE_R,
 			},
 			Card {
 				name: "Krabbe",
 				color: "Blue",
-				moves: [Offset {x:0,y:1}, Offset {x:-2,y:0}, Offset {x:2,y:0}, 			Offset {x:2,y:0}]
+				moves: MOVE_F | MOVE_LL | MOVE_RR,
 			},
 			Card {
 				name: "Tiger",
 				color: "Blue",
-				moves: [Offset {x:0,y:2}, Offset {x:0,y:-1}, 							Offset {x:0,y:-1}, Offset {x:0,y:-1}]
+				moves: MOVE_FF | MOVE_B,
 			},
 			Card {
 				name: "Gans",
 				color: "Blue",
-				moves: [Offset {x:-1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}, Offset {x:1,y:-1}]
+				moves: MOVE_FL | MOVE_L | MOVE_R | MOVE_BR,
 			},
 			Card {
 				name: "Hahn",
 				color: "Red",
-				moves: [Offset {x:1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}, Offset {x:-1,y:-1}]
+				moves: MOVE_FR | MOVE_L | MOVE_R | MOVE_BL,
 			},
 			Card {
 				name: "Ochse",
 				color: "Blue",
-				moves: [Offset {x:0,y:1}, Offset {x:1,y:0}, Offset {x:0,y:-1}, 						Offset {x:0,y:-1}]
+				moves: MOVE_F | MOVE_R | MOVE_B,
 			},
 			Card {
 				name: "Pferd",
 				color: "Red",
-				moves: [Offset {x:0,y:1}, Offset {x:-1,y:0}, Offset {x:0,y:-1}, 					Offset {x:0,y:-1}]
+				moves: MOVE_F | MOVE_L | MOVE_B,
 			},
 			Card {
 				name: "Wildschwein",
 				color: "Red",
-				moves: [Offset {x:0,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}, 						Offset {x:1,y:0}]
+				moves: MOVE_F | MOVE_L | MOVE_R,
 			},
 			Card {
 				name: "Aal",
 				color: "Blue",
-				moves: [Offset {x:-1,y:1}, Offset {x:1,y:0}, Offset {x:-1,y:-1}, 					Offset {x:-1,y:-1}]
+				moves: MOVE_FL | MOVE_R | MOVE_BL,
 			},
 			Card {
 				name: "Gottesanbeterin",
 				color: "Red",
-				moves: [Offset {x:-1,y:1}, Offset {x:1,y:1}, Offset {x:0,y:-1}, 					Offset {x:0,y:-1}]
+				moves: MOVE_FL | MOVE_FR | MOVE_B,
 			},
 			Card {
 				name: "Kobra",
 				color: "Red",
-				moves: [Offset {x:1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:-1}, 					Offset {x:1,y:-1}]
+				moves: MOVE_FR | MOVE_L | MOVE_BR,
 			},
 			Card {
 				name: "Kranich",
 				color: "Blue",
-				moves: [Offset {x:0,y:1}, Offset {x:-1,y:-1}, Offset {x:1,y:-1}, 					Offset {x:1,y:-1}]
+				moves: MOVE_F | MOVE_BL | MOVE_BR,
 			},
 			Card {
 				name: "Frosch",
 				color: "Red",
-				moves: [Offset {x:-1,y:1}, Offset {x:-2,y:0}, Offset {x:1,y:-1}, 					Offset {x:1,y:-1}]
+				moves: MOVE_FL | MOVE_LL | MOVE_BR,
 			},
 			Card {
 				name: "Hase",
 				color: "Blue",
-				moves: [Offset {x:1,y:1}, Offset {x:2,y:0}, Offset {x:-1,y:-1}, 					Offset {x:-1,y:-1}]
+				moves: MOVE_FR | MOVE_RR | MOVE_BL,
 			},
 		];
 	}

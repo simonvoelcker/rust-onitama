@@ -37,7 +37,7 @@ impl Game {
 		let mut options: Vec<MoveOption> = Vec::new();
 		for (_piece, position) in pieces.iter() {
 			for card in cards.iter() {
-				for offset in card.moves.iter() {
+				for offset in Offset::from_moves(card.moves).iter() {
 				    let player_offset = if self.current_player == 0 {
                         Offset {x: offset.x, y: offset.y}
 				    } else {
