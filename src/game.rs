@@ -119,7 +119,7 @@ impl Game {
 
 	pub fn evaluate_move(&mut self, option: &MoveOption, depth: usize) -> f64 {
 		self.make_move(option);
-		let mut score = 0.5;
+		let score;
 
 		match self.get_result() {
 			GameResult::DecidedWithWinner(winning_player) => {
@@ -128,12 +128,27 @@ impl Game {
 			},
 			GameResult::Undecided => {
 				if depth > 0 {
-					let mut total_score = 0.0;
-					let all_options = self.get_all_options();
-				    for option in all_options.iter() {
-				    	total_score += self.evaluate_move(&option, depth-1);
+					let mut total_non_one = 0.0;
+					let mut num_non_one = 0.0;
+					let mut max_score = 0.0;
+
+				    for option in self.get_all_options().iter() {
+				    	let option_score = self.evaluate_move(&option, depth-1);
+				    	if option_score > max_score {
+				    		max_score = option_score;
+				    	}
+				    	if option_score < 1.0 {
+				    		num_non_one += 1.0;
+				    		total_non_one += option_score;
+				    	}
 				    }
-			    	score = 1.0 - total_score / all_options.len() as f64;
+				    if max_score == 1.0 {
+				    	// opponent CAN win next move
+				    	score = 0.0;
+				    } else {
+				    	// average all scores excluding ones 
+				    	score = 1.0 - total_non_one / num_non_one;
+				    }
 				} else {
 					// score based on piece balance
 					let balance = self.field.get_piece_balance(self.current_player);
