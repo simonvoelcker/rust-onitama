@@ -1,5 +1,5 @@
 use std::fmt;
-use crate::position::*;
+use crate::position::Offset;
 
 #[derive(Clone)]
 pub struct Card {
@@ -7,6 +7,28 @@ pub struct Card {
 	pub color: &'static str,
 	pub moves: u32,
 }
+
+// Front, Back, Left, Right moves.
+// The corresponding bit is read from an ideal 5x5 grid, rowwise,
+// but only existing moves are considered here, so some are missing.
+const MOVE_FF:   u32 = 1 << 2;
+
+const MOVE_FLL:  u32 = 1 << 5;
+const MOVE_FL:   u32 = 1 << 6;
+const MOVE_F:    u32 = 1 << 7;
+const MOVE_FR:   u32 = 1 << 8;
+const MOVE_FRR:  u32 = 1 << 9;
+
+const MOVE_LL:   u32 = 1 << 10;
+const MOVE_L:    u32 = 1 << 11;
+
+const MOVE_R:    u32 = 1 << 13;
+const MOVE_RR:   u32 = 1 << 14;
+
+const MOVE_BL:   u32 = 1 << 16;
+const MOVE_B:    u32 = 1 << 17;
+const MOVE_BR:   u32 = 1 << 18;
+
 
 impl Card {
 	pub const fn get_all_cards() -> [Card; 16] {
@@ -92,6 +114,18 @@ impl Card {
 				moves: MOVE_FR | MOVE_RR | MOVE_BL,
 			},
 		];
+	}
+
+	pub fn get_offsets(&self, invert: bool) -> Vec<Offset> {
+		let mut offsets: Vec<Offset> = Vec::new();
+		for bit_index in 0..25 {
+			if self.moves & (1 << bit_index) > 0 {
+				let x = ((bit_index % 5) - 2) * (if invert {-1} else {1});
+				let y = (2 - (bit_index / 5)) * (if invert {-1} else {1});
+				offsets.push(Offset {x, y});
+			}
+		}
+		offsets
 	}
 }
 

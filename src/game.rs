@@ -2,7 +2,7 @@ use std::fmt;
 use crate::field::Field;
 use crate::card::Card;
 use crate::player::Player;
-use crate::position::{Offset, Position};
+use crate::position::Position;
 use crate::piece::Piece;
 use crate::move_option::MoveOption;
 
@@ -37,13 +37,8 @@ impl Game {
 		let mut options: Vec<MoveOption> = Vec::new();
 		for (_piece, position) in pieces.iter() {
 			for card in cards.iter() {
-				for offset in Offset::from_moves(card.moves).iter() {
-				    let player_offset = if self.current_player == 0 {
-                        Offset {x: offset.x, y: offset.y}
-				    } else {
-                        Offset {x: -offset.x, y: -offset.y}
-				    };
-					let target_position = position.offset(&player_offset);
+				for offset in card.get_offsets(self.current_player == 1).iter() {
+					let target_position = position.offset(offset);
 					if !target_position.in_field() {
 					    continue;
 					}
