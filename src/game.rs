@@ -128,21 +128,16 @@ impl Game {
 			},
 			GameResult::Undecided => {
 				if depth > 0 {
-					let mut max_score = 0.0;
-					let mut tot_score = 0.0;
+					let mut total_score = 0.0;
 					let all_options = self.get_all_options();
 				    for option in all_options.iter() {
-				    	let option_score = self.evaluate_move(&option, depth-1);
-						if option_score > max_score {
-							max_score = option_score;
-						}
-						tot_score += option_score;
+				    	total_score += self.evaluate_move(&option, depth-1);
 				    }
-			    	score = 1.0 - tot_score / all_options.len() as f64;
+			    	score = 1.0 - total_score / all_options.len() as f64;
 				} else {
 					// score based on piece balance
-					let balance = self.field.get_piece_balance(1-self.current_player);
-					score = 0.5 + (balance as f64) / 10.0;
+					let balance = self.field.get_piece_balance(self.current_player);
+					score = 0.5 - (balance as f64) / 10.0;
 				}
 			}
 		};
