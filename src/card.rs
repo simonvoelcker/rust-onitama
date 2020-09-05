@@ -1,7 +1,6 @@
 use std::fmt;
 use crate::position::Offset;
 
-#[derive(Clone)]
 pub struct Card {
 	pub name: &'static str,
 	pub color: &'static str,

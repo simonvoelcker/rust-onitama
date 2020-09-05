@@ -19,11 +19,17 @@ pub enum GameResult {
 	Undecided,
 }
 
+static PIECES: [Piece; 10] = Piece::get_all_pieces();
+
 impl Game {
 	pub fn new(players: [Player; 2], public_card: &'static Card) -> Self {
 		let player_0_starts = players[0].name.starts_with(&public_card.color);
+		let pieces = [
+			&PIECES[0], &PIECES[1], &PIECES[2], &PIECES[3], &PIECES[4],
+			&PIECES[5], &PIECES[6], &PIECES[7], &PIECES[8], &PIECES[9],
+		];
 		Self {
-			field: Field::new(),
+			field: Field::new(pieces),
 			players,
 			public_card,
 			current_player: if player_0_starts {0} else {1},
@@ -31,7 +37,7 @@ impl Game {
 	}
 
 	pub fn get_all_options(&self) -> Vec<MoveOption> {
-		let pieces: Vec<(Piece, Position)> = self.field.get_all_pieces(self.current_player);
+		let pieces: Vec<(&'static Piece, Position)> = self.field.get_all_pieces(self.current_player);
 		let cards = &self.players[self.current_player].cards;
 		
 		let mut options: Vec<MoveOption> = Vec::new();
@@ -49,7 +55,7 @@ impl Game {
                     	from_position: position.clone(),
                     	card: card,
                     	target_position: target_position.clone(),
-                    	target_piece: self.field.get_piece(&target_position).clone(),
+                    	target_piece: self.field.get_piece(&target_position),
                     	public_card: self.public_card,
                     });
 				}
@@ -60,7 +66,7 @@ impl Game {
 
 	pub fn make_move(&mut self, option: &MoveOption) {
 		// move piece
-		let piece: Option<Piece> = self.field.get_piece(&option.from_position).clone();
+		let piece: Option<&'static Piece> = self.field.get_piece(&option.from_position);
 	    self.field.set_piece(&option.target_position, piece);
 	    self.field.set_piece(&option.from_position, None);
 
@@ -90,9 +96,9 @@ impl Game {
 	    }
 
 		// move pieces back
-		let piece: Option<Piece> = self.field.get_piece(&option.target_position).clone();
+		let piece: Option<&'static Piece> = self.field.get_piece(&option.target_position);
 	    self.field.set_piece(&option.from_position, piece);
-	    self.field.set_piece(&option.target_position, option.target_piece.clone());
+	    self.field.set_piece(&option.target_position, option.target_piece);
 	}
 
 	pub fn get_result(&self) -> GameResult {

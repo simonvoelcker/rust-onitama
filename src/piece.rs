@@ -1,9 +1,25 @@
 use std::fmt;
 
-#[derive(Clone)]
 pub struct Piece {
 	pub player: usize,
 	pub is_master: bool,
+}
+
+impl Piece {
+	pub const fn get_all_pieces() -> [Piece; 10] {
+		return [
+			Piece {player: 0, is_master: false},
+			Piece {player: 0, is_master: false},
+			Piece {player: 0, is_master: true},
+			Piece {player: 0, is_master: false},
+			Piece {player: 0, is_master: false},
+			Piece {player: 1, is_master: false},
+			Piece {player: 1, is_master: false},
+			Piece {player: 1, is_master: true},
+			Piece {player: 1, is_master: false},
+			Piece {player: 1, is_master: false},
+		]
+	}
 }
 
 impl fmt::Display for Piece {

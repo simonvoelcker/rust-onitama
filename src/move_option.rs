@@ -9,7 +9,7 @@ pub struct MoveOption {
 	pub card: &'static Card,
 	pub target_position: Position,
 	// necessary for reversal of move
-	pub target_piece: Option<Piece>,
+	pub target_piece: Option<&'static Piece>,
 	pub public_card: &'static Card,
 }
 

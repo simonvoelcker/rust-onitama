@@ -4,24 +4,24 @@ use crate::position::Position;
 
 
 pub struct Field {
-	pub pieces: [Option<Piece>; 25],
+	pub pieces: [Option<&'static Piece>; 25],
 }
 
 impl Field {
-	pub fn new() -> Self {
+	pub fn new(pieces: [&'static Piece; 10]) -> Self {
 		let mut field = Self {pieces: Default::default()};
 		for col in 0..5 {
-            field.set_piece(&Position {x: col, y: 0}, Some(Piece {player: 0, is_master: col == 2}));
-            field.set_piece(&Position {x: col, y: 4}, Some(Piece {player: 1, is_master: col == 2}));
+            field.set_piece(&Position {x: col, y: 0}, Some(pieces[col as usize]));
+            field.set_piece(&Position {x: col, y: 4}, Some(pieces[col as usize + 5]));
 		}
 		field
 	}
 
-	pub fn get_piece(&self, position: &Position) -> &Option<Piece> {
-		return &self.pieces[position.field_index()];
+	pub fn get_piece(&self, position: &Position) -> Option<&'static Piece> {
+		return self.pieces[position.field_index()];
 	}
 
-	pub fn set_piece(&mut self, position: &Position, piece: Option<Piece>) {
+	pub fn set_piece(&mut self, position: &Position, piece: Option<&'static Piece>) {
 	    self.pieces[position.field_index()] = piece;
 	}
 
@@ -32,12 +32,12 @@ impl Field {
         false
 	}
 
-	pub fn get_all_pieces(&self, player: usize) -> Vec<(Piece, Position)> {
-		let mut pieces: Vec<(Piece, Position)> = Vec::new();
+	pub fn get_all_pieces(&self, player: usize) -> Vec<(&'static Piece, Position)> {
+		let mut pieces: Vec<(&'static Piece, Position)> = Vec::new();
 		for field_index in 0..25 {
 	        if let Some(piece) = &self.pieces[field_index] {
 				if piece.player == player {
-					pieces.push((piece.clone(), Position::from_field_index(field_index)));
+					pieces.push((piece, Position::from_field_index(field_index)));
 				}
 	        }
 		}
@@ -62,7 +62,7 @@ impl fmt::Display for Field {
 		for y in 0..5 {
 			write!(f, "{}  | ", 5-y)?;
 			for x in 0..5 {
-				let piece: &Option<Piece> = self.get_piece(&Position { x: x, y: 4-y });
+				let piece: Option<&'static Piece> = self.get_piece(&Position { x: x, y: 4-y });
 				match piece {
 					Some(piece) => {write!(f, "{} ", piece)?},
 					None => {write!(f, "- ")?},
