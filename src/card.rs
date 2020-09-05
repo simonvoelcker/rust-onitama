@@ -3,93 +3,93 @@ use crate::position::Offset;
 
 #[derive(Clone)]
 pub struct Card {
-	pub name: String,
-	pub color: String,
-	pub moves: Vec<Offset>,
+	pub name: &'static str,
+	pub color: &'static str,
+	pub moves: [Offset; 4],
 }
 
 impl Card {
-	pub fn get_all_cards() -> Vec<Card> {
-		return vec![
+	pub const fn get_all_cards() -> [Card; 16] {
+		return [
 			Card {
-				name: "Affe".to_string(),
-				color: "Blue".to_string(),
-				moves: vec![Offset {x:-1,y:1}, Offset {x:1,y:1}, Offset {x:-1,y:-1}, Offset {x:1,y:-1}]
+				name: "Affe",
+				color: "Blue",
+				moves: [Offset {x:-1,y:1}, Offset {x:1,y:1}, Offset {x:-1,y:-1}, Offset {x:1,y:-1}]
 			},
 			Card {
-				name: "Drache".to_string(),
-				color: "Red".to_string(),
-				moves: vec![Offset {x:-2,y:1}, Offset {x:2,y:1}, Offset {x:-1,y:-1}, Offset {x:1,y:-1}]
+				name: "Drache",
+				color: "Red",
+				moves: [Offset {x:-2,y:1}, Offset {x:2,y:1}, Offset {x:-1,y:-1}, Offset {x:1,y:-1}]
 			},
 			Card {
-				name: "Elefant".to_string(),
-				color: "Red".to_string(),
-				moves: vec![Offset {x:-1,y:1}, Offset {x:1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}]
+				name: "Elefant",
+				color: "Red",
+				moves: [Offset {x:-1,y:1}, Offset {x:1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}]
 			},
 			Card {
-				name: "Krabbe".to_string(),
-				color: "Blue".to_string(),
-				moves: vec![Offset {x:0,y:1}, Offset {x:-2,y:0}, Offset {x:2,y:0}]
+				name: "Krabbe",
+				color: "Blue",
+				moves: [Offset {x:0,y:1}, Offset {x:-2,y:0}, Offset {x:2,y:0}, 			Offset {x:2,y:0}]
 			},
 			Card {
-				name: "Tiger".to_string(),
-				color: "Blue".to_string(),
-				moves: vec![Offset {x:0,y:2}, Offset {x:0,y:-1}]
+				name: "Tiger",
+				color: "Blue",
+				moves: [Offset {x:0,y:2}, Offset {x:0,y:-1}, 							Offset {x:0,y:-1}, Offset {x:0,y:-1}]
 			},
 			Card {
-				name: "Gans".to_string(),
-				color: "Blue".to_string(),
-				moves: vec![Offset {x:-1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}, Offset {x:1,y:-1}]
+				name: "Gans",
+				color: "Blue",
+				moves: [Offset {x:-1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}, Offset {x:1,y:-1}]
 			},
 			Card {
-				name: "Hahn".to_string(),
-				color: "Red".to_string(),
-				moves: vec![Offset {x:1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}, Offset {x:-1,y:-1}]
+				name: "Hahn",
+				color: "Red",
+				moves: [Offset {x:1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}, Offset {x:-1,y:-1}]
 			},
 			Card {
-				name: "Ochse".to_string(),
-				color: "Blue".to_string(),
-				moves: vec![Offset {x:0,y:1}, Offset {x:1,y:0}, Offset {x:0,y:-1}]
+				name: "Ochse",
+				color: "Blue",
+				moves: [Offset {x:0,y:1}, Offset {x:1,y:0}, Offset {x:0,y:-1}, 						Offset {x:0,y:-1}]
 			},
 			Card {
-				name: "Pferd".to_string(),
-				color: "Red".to_string(),
-				moves: vec![Offset {x:0,y:1}, Offset {x:-1,y:0}, Offset {x:0,y:-1}]
+				name: "Pferd",
+				color: "Red",
+				moves: [Offset {x:0,y:1}, Offset {x:-1,y:0}, Offset {x:0,y:-1}, 					Offset {x:0,y:-1}]
 			},
 			Card {
-				name: "Wildschwein".to_string(),
-				color: "Red".to_string(),
-				moves: vec![Offset {x:0,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}]
+				name: "Wildschwein",
+				color: "Red",
+				moves: [Offset {x:0,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:0}, 						Offset {x:1,y:0}]
 			},
 			Card {
-				name: "Aal".to_string(),
-				color: "Blue".to_string(),
-				moves: vec![Offset {x:-1,y:1}, Offset {x:1,y:0}, Offset {x:-1,y:-1}]
+				name: "Aal",
+				color: "Blue",
+				moves: [Offset {x:-1,y:1}, Offset {x:1,y:0}, Offset {x:-1,y:-1}, 					Offset {x:-1,y:-1}]
 			},
 			Card {
-				name: "Gottesanbeterin".to_string(),
-				color: "Red".to_string(),
-				moves: vec![Offset {x:-1,y:1}, Offset {x:1,y:1}, Offset {x:0,y:-1}]
+				name: "Gottesanbeterin",
+				color: "Red",
+				moves: [Offset {x:-1,y:1}, Offset {x:1,y:1}, Offset {x:0,y:-1}, 					Offset {x:0,y:-1}]
 			},
 			Card {
-				name: "Kobra".to_string(),
-				color: "Red".to_string(),
-				moves: vec![Offset {x:1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:-1}]
+				name: "Kobra",
+				color: "Red",
+				moves: [Offset {x:1,y:1}, Offset {x:-1,y:0}, Offset {x:1,y:-1}, 					Offset {x:1,y:-1}]
 			},
 			Card {
-				name: "Kranich".to_string(),
-				color: "Blue".to_string(),
-				moves: vec![Offset {x:0,y:1}, Offset {x:-1,y:-1}, Offset {x:1,y:-1}]
+				name: "Kranich",
+				color: "Blue",
+				moves: [Offset {x:0,y:1}, Offset {x:-1,y:-1}, Offset {x:1,y:-1}, 					Offset {x:1,y:-1}]
 			},
 			Card {
-				name: "Frosch".to_string(),
-				color: "Red".to_string(),
-				moves: vec![Offset {x:-1,y:1}, Offset {x:-2,y:0}, Offset {x:1,y:-1}]
+				name: "Frosch",
+				color: "Red",
+				moves: [Offset {x:-1,y:1}, Offset {x:-2,y:0}, Offset {x:1,y:-1}, 					Offset {x:1,y:-1}]
 			},
 			Card {
-				name: "Hase".to_string(),
-				color: "Blue".to_string(),
-				moves: vec![Offset {x:1,y:1}, Offset {x:2,y:0}, Offset {x:-1,y:-1}]
+				name: "Hase",
+				color: "Blue",
+				moves: [Offset {x:1,y:1}, Offset {x:2,y:0}, Offset {x:-1,y:-1}, 					Offset {x:-1,y:-1}]
 			},
 		];
 	}

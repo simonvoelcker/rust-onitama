@@ -10,7 +10,7 @@ use crate::move_option::MoveOption;
 pub struct Game {
 	pub field: Field,
 	pub players: [Player; 2],
-	pub public_card: Card,
+	pub public_card: &'static Card,
 	pub current_player: usize,
 }
 
@@ -20,7 +20,7 @@ pub enum GameResult {
 }
 
 impl Game {
-	pub fn new(players: [Player; 2], public_card: Card) -> Self {
+	pub fn new(players: [Player; 2], public_card: &'static Card) -> Self {
 		let player_0_starts = players[0].name.starts_with(&public_card.color);
 		Self {
 			field: Field::new(),
@@ -52,10 +52,10 @@ impl Game {
 					}
                     options.push(MoveOption {
                     	from_position: position.clone(),
-                    	card: card.clone(),
+                    	card: card,
                     	target_position: target_position.clone(),
                     	target_piece: self.field.get_piece(&target_position).clone(),
-                    	public_card: self.public_card.clone(),
+                    	public_card: self.public_card,
                     });
 				}
 			}
@@ -71,11 +71,11 @@ impl Game {
 
 	    // move cards
 	    if self.players[self.current_player].cards[0] == option.card {
-		    self.players[self.current_player].cards[0] = self.public_card.clone();
+		    self.players[self.current_player].cards[0] = self.public_card;
 	    } else {
-		    self.players[self.current_player].cards[1] = self.public_card.clone();
+		    self.players[self.current_player].cards[1] = self.public_card;
 	    }
-	    self.public_card = option.card.clone();
+	    self.public_card = option.card;
 
 	    // change active player
 	    self.current_player = 1-self.current_player;
@@ -87,11 +87,11 @@ impl Game {
 
 	    // move cards back
 	    if self.players[self.current_player].cards[0] == option.public_card {
-		    self.public_card = self.players[self.current_player].cards[0].clone();
-		    self.players[self.current_player].cards[0] = option.card.clone();
+		    self.public_card = self.players[self.current_player].cards[0];
+		    self.players[self.current_player].cards[0] = option.card;
 	    } else {
-		    self.public_card = self.players[self.current_player].cards[1].clone();
-		    self.players[self.current_player].cards[1] = option.card.clone();
+		    self.public_card = self.players[self.current_player].cards[1];
+		    self.players[self.current_player].cards[1] = option.card;
 	    }
 
 		// move pieces back
@@ -101,7 +101,7 @@ impl Game {
 	}
 
 	pub fn get_result(&self) -> GameResult {
-		for (player_index, player) in self.players.iter().enumerate() {
+		for (player_index, _player) in self.players.iter().enumerate() {
 			match self.field.get_master_position(player_index) {
 				Some(position) => {
 					if position.x == 2 && position.y == (1-player_index as isize) * 4 {

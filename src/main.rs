@@ -15,18 +15,19 @@ use card::Card;
 use player::Player;
 use move_option::MoveOption;
 
+static CARDS: [Card; 16] = Card::get_all_cards();
+
 fn main() {
 
-    let mut cards = Card::get_all_cards();
-	let mut rng = &mut rand::thread_rng();	
-	cards.shuffle(&mut rng);
+	// let mut rng = &mut rand::thread_rng();
+	// cards.shuffle(&mut rng);
 
 	let players: [Player; 2] = [
-		Player {name: "Blue player".to_string(), cards: [cards.pop().expect(""), cards.pop().expect("")]},
-		Player {name: "Red player".to_string(), cards: [cards.pop().expect(""), cards.pop().expect("")]},
+		Player {name: "Blue player".to_string(), cards: [&CARDS[0], &CARDS[1]]},
+		Player {name: "Red player".to_string(), cards: [&CARDS[2], &CARDS[3]]},
 	];
 
-	let mut game = Game::new(players, cards.pop().expect(""));
+	let mut game = Game::new(players, &CARDS[4]);
 
 	loop {
 	    println!("{}", game);

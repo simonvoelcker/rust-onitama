@@ -4,7 +4,7 @@ use crate::card::Card;
 
 pub struct Player {
 	pub name: String,
-	pub cards: [Card; 2],
+	pub cards: [&'static Card; 2],
 }
 
 impl fmt::Display for Player {
