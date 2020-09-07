@@ -1,4 +1,5 @@
 use std::{fmt, cmp, hash};
+use std::cmp::Ordering;
 
 use crate::position::Offset;
 
@@ -143,3 +144,15 @@ impl cmp::PartialEq for Card {
 }
 
 impl cmp::Eq for Card {}
+
+impl cmp::Ord for Card {
+	fn cmp(&self, other: &Self) -> Ordering {
+        self.name.cmp(&other.name)
+    }
+}
+
+impl PartialOrd for Card {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}

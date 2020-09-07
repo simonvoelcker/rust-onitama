@@ -18,6 +18,23 @@ impl Field {
 		field
 	}
 
+	pub fn compress(&self) -> u64 {
+		// produce a compressed representation of the field.
+		// the result fits into 10*3 + 15*1 = 45 bits.
+		let mut compressed: u64 = 0;
+		for field_index in 0..25 {
+			match self.pieces[field_index] {
+				Some(piece) => {
+					compressed = (compressed << 3) | (1 << 2) | (2*piece.player as u64) | (piece.is_master as u64);
+				},
+				None => {
+					compressed <<= 1;
+				},
+			};
+		}
+		compressed
+	}
+
 	pub fn get_piece(&self, position: &Position) -> Option<&'static Piece> {
 		return self.pieces[position.field_index()];
 	}

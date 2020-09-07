@@ -1,4 +1,5 @@
 use std::{fmt, cmp, hash};
+use std::collections::HashMap;
 
 use crate::field::Field;
 use crate::card::Card;
@@ -36,6 +37,39 @@ impl Game {
 			public_card,
 			current_player: if player_0_starts {0} else {1},
 		}
+	}
+
+	pub fn compress(&self) -> u64 {
+		// produce a compressed representation of the game. result fits into 64 bits.
+		// current player is 1 bit, the cards 10 bits, the field 45 bits.
+		let mut compressed: u64 = self.current_player as u64;
+		compressed = (compressed << 10) | self.compress_cards();
+		compressed = (compressed << 45) | self.field.compress();
+		compressed
+	}
+
+	fn compress_cards(&self) -> u64 {
+		let mut compressed: u64 = 0;
+		// cards selection fits into 10 bits: given the sorted list of all cards in the game,
+		// each card is either public, or player 1's, or player 2's (=2 bit each).
+		let mut cards: [&'static Card; 5] = [
+			self.public_card,
+			self.players[0].cards[0],
+			self.players[0].cards[1],
+			self.players[1].cards[0],
+			self.players[1].cards[1],
+		];
+		cards.sort();  // TODO sorting references may not act as I hope it will
+		for card in cards.iter() {
+			if card == &self.public_card {
+				compressed = compressed << 2;
+			} else if card == &self.players[0].cards[0] || card == &self.players[0].cards[1] {
+				compressed = (compressed << 2) | 0x02;
+			} else {
+				compressed = (compressed << 2) | 0x03;
+			}
+		}
+		compressed
 	}
 
 	pub fn get_all_options(&self) -> Vec<MoveOption> {
@@ -119,7 +153,7 @@ impl Game {
 		GameResult::Undecided
 	}
 
-	pub fn evaluate_move(&mut self, option: &MoveOption, depth: usize) -> f64 {
+	pub fn evaluate_move(&mut self, option: &MoveOption, depth: usize, cache: &mut HashMap<u64, f64>) -> f64 {
 		self.make_move(option);
 		let score;
 
@@ -132,7 +166,7 @@ impl Game {
 				if depth > 1 {
 					let mut max_score = 0.0;
 				    for option in self.get_all_options().iter() {
-				    	let option_score = self.evaluate_move(&option, depth-1);
+				    	let option_score = self.evaluate_move(&option, depth-1, cache);
 				    	if option_score > max_score {
 				    		max_score = option_score;
 				    	}
@@ -145,6 +179,13 @@ impl Game {
 				}
 			}
 		};
+
+		let compressed = self.compress();
+		if cache.contains_key(&compressed) {
+			// cache.entry(compressed);
+		} else {
+			cache.insert(compressed, 1.0);
+		}
 
 		self.undo_move(option);
 		score

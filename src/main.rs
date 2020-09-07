@@ -8,6 +8,7 @@ mod move_option;
 
 use std::io;
 use std::io::Write;
+use std::collections::HashMap;
 use rand::seq::SliceRandom;
 
 use game::{Game, GameResult};
@@ -40,7 +41,9 @@ fn main() {
 	    let options: Vec<MoveOption> = game.get_all_options();
 	    for (option_index, option) in options.iter().enumerate() {
 	    	if game.current_player == 1 {
-		    	let score = game.evaluate_move(&option, 5);
+	    		let mut cache: HashMap<u64, f64> = HashMap::new();
+		    	let score = game.evaluate_move(&option, 5, &mut cache);
+		    	println!("Saw {} configurations", cache.len());
 			    println!("Option {:2}: {} (Score: {:.3})", option_index+1, option, score);
 	    	} else {
 			    println!("Option {:2}: {}", option_index+1, option);
