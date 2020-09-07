@@ -127,28 +127,15 @@ impl Game {
 				score = if self.current_player == winning_player {0.0} else {1.0}
 			},
 			GameResult::Undecided => {
-				if depth > 0 {
-					let mut total_non_one = 0.0;
-					let mut num_non_one = 0.0;
+				if depth > 1 {
 					let mut max_score = 0.0;
-
 				    for option in self.get_all_options().iter() {
 				    	let option_score = self.evaluate_move(&option, depth-1);
 				    	if option_score > max_score {
 				    		max_score = option_score;
 				    	}
-				    	if option_score < 1.0 {
-				    		num_non_one += 1.0;
-				    		total_non_one += option_score;
-				    	}
 				    }
-				    if max_score == 1.0 {
-				    	// opponent CAN win next move
-				    	score = 0.0;
-				    } else {
-				    	// average all scores excluding ones 
-				    	score = 1.0 - total_non_one / num_non_one;
-				    }
+			    	score = 1.0 - max_score;
 				} else {
 					// score based on piece balance
 					let balance = self.field.get_piece_balance(self.current_player);
