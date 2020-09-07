@@ -153,7 +153,7 @@ impl Game {
 		GameResult::Undecided
 	}
 
-	pub fn evaluate_move(&mut self, option: &MoveOption, depth: usize, cache: &mut HashMap<u64, f64>) -> f64 {
+	pub fn evaluate_move(&mut self, option: &MoveOption, depth: usize, score_cache: &mut HashMap<u64, f64>) -> f64 {
 		self.make_move(option);
 		let score;
 
@@ -166,9 +166,12 @@ impl Game {
 				if depth > 1 {
 					let mut max_score = 0.0;
 				    for option in self.get_all_options().iter() {
-				    	let option_score = self.evaluate_move(&option, depth-1, cache);
+				    	let option_score = self.evaluate_move(&option, depth-1, score_cache);
 				    	if option_score > max_score {
 				    		max_score = option_score;
+				    	}
+				    	if max_score == 1.0 {
+				    		break;
 				    	}
 				    }
 			    	score = 1.0 - max_score;
@@ -180,11 +183,9 @@ impl Game {
 			}
 		};
 
-		let compressed = self.compress();
-		if cache.contains_key(&compressed) {
-			// cache.entry(compressed);
-		} else {
-			cache.insert(compressed, 1.0);
+		if depth > 1 {
+			// cache only if we had to recurse
+			*score_cache.entry(self.compress()).or_insert(1.0) += 1.0;
 		}
 
 		self.undo_move(option);

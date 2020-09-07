@@ -39,15 +39,24 @@ fn main() {
 	    println!("{}", game);
 
 	    let options: Vec<MoveOption> = game.get_all_options();
+		let mut score_cache: HashMap<u64, f64> = HashMap::new();
+
 	    for (option_index, option) in options.iter().enumerate() {
 	    	if game.current_player == 1 {
-	    		let mut cache: HashMap<u64, f64> = HashMap::new();
-		    	let score = game.evaluate_move(&option, 5, &mut cache);
-		    	println!("Saw {} configurations", cache.len());
+		    	let score = game.evaluate_move(&option, 5, &mut score_cache);
 			    println!("Option {:2}: {} (Score: {:.3})", option_index+1, option, score);
 	    	} else {
 			    println!("Option {:2}: {}", option_index+1, option);
 	    	}
+	    }
+
+	    if game.current_player == 1 {
+			let mut sum: f64 = 0.0;
+			for (_, count) in score_cache.iter() {
+				sum += count;
+			}
+			println!("Bot saw {} unique configurations, {} total, for a ratio of {:.1}:1",
+				score_cache.len(), sum, sum/(score_cache.len() as f64));
 	    }
 
 	    let mut choice = 0;
