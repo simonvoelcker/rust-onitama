@@ -164,17 +164,23 @@ impl Game {
 			},
 			GameResult::Undecided => {
 				if depth > 1 {
-					let mut max_score = 0.0;
-				    for option in self.get_all_options().iter() {
-				    	let option_score = self.evaluate_move(&option, depth-1, score_cache);
-				    	if option_score > max_score {
-				    		max_score = option_score;
-				    	}
-				    	if max_score == 1.0 {
-				    		break;
-				    	}
-				    }
-			    	score = 1.0 - max_score;
+					let cache_key = self.compress();
+					if score_cache.contains_key(&cache_key) {
+						score = *score_cache.get(&cache_key).unwrap();
+					} else {
+						let mut max_score = 0.0;
+						for option in self.get_all_options().iter() {
+							let option_score = self.evaluate_move(&option, depth-1, score_cache);
+							if option_score > max_score {
+								max_score = option_score;
+							}
+							if max_score == 1.0 {
+								break;
+							}
+						}
+						score = 1.0 - max_score;
+						score_cache.insert(cache_key, score);
+					}
 				} else {
 					// score based on piece balance
 					let balance = self.field.get_piece_balance(self.current_player);
@@ -182,11 +188,6 @@ impl Game {
 				}
 			}
 		};
-
-		if depth > 1 {
-			// cache only if we had to recurse
-			*score_cache.entry(self.compress()).or_insert(1.0) += 1.0;
-		}
 
 		self.undo_move(option);
 		score
