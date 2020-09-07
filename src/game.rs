@@ -1,4 +1,5 @@
-use std::fmt;
+use std::{fmt, cmp, hash};
+
 use crate::field::Field;
 use crate::card::Card;
 use crate::player::Player;
@@ -7,6 +8,7 @@ use crate::piece::Piece;
 use crate::move_option::MoveOption;
 
 
+#[derive(hash::Hash, cmp::PartialEq, cmp::Eq)]
 pub struct Game {
 	pub field: Field,
 	pub players: [Player; 2],

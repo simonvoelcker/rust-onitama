@@ -1,7 +1,9 @@
-use std::fmt;
+use std::{fmt, cmp, hash};
 
 use crate::card::Card;
 
+
+#[derive(hash::Hash, cmp::PartialEq, cmp::Eq)]
 pub struct Player {
 	pub name: &'static str,
 	pub cards: [&'static Card; 2],

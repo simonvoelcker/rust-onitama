@@ -1,5 +1,6 @@
-use std::fmt;
+use std::{fmt, cmp, hash};
 
+#[derive(cmp::PartialEq, cmp::Eq, hash::Hash)]
 pub struct Piece {
 	pub player: usize,
 	pub is_master: bool,

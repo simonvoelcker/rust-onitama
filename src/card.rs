@@ -1,6 +1,8 @@
-use std::fmt;
+use std::{fmt, cmp, hash};
+
 use crate::position::Offset;
 
+#[derive(hash::Hash)]
 pub struct Card {
 	pub name: &'static str,
 	pub color: &'static str,
@@ -134,8 +136,10 @@ impl fmt::Display for Card {
 	}
 }
 
-impl std::cmp::PartialEq for Card {
+impl cmp::PartialEq for Card {
     fn eq(&self, other: &Self) -> bool {
         self.name == other.name
     }
 }
+
+impl cmp::Eq for Card {}

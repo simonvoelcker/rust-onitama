@@ -1,8 +1,9 @@
-use std::fmt;
+use std::{fmt, cmp, hash};
+
 use crate::piece::Piece;
 use crate::position::Position;
 
-
+#[derive(hash::Hash, cmp::PartialEq, cmp::Eq)]
 pub struct Field {
 	pub pieces: [Option<&'static Piece>; 25],
 }
