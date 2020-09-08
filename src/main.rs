@@ -25,7 +25,7 @@ fn main() {
 	let public_card = &CARDS[indices[4]];
 
 	let players: [Player; 2] = [
-		Player {name: "Blue player", cards: player1_cards, is_bot: false},
+		Player {name: "Blue player", cards: player1_cards, is_bot: true},
 		Player {name: "Red player", cards: player2_cards, is_bot: true},
 	];
 
@@ -36,6 +36,7 @@ fn main() {
 	    &game.run_turn();
 	    if let GameResult::DecidedWithWinner(_) = game.get_result() {
 	    	println!("The game is over!");
+		    println!("{}", game);
 	    	break;
 	    }
 	}

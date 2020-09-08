@@ -150,22 +150,23 @@ impl Game {
 	fn make_bot_move(&mut self) {
 	    let options: Vec<MoveOption> = self.get_all_options();
 		print!("Bot has {} options. Thinking.", options.len());
+		// TODO handle ZERO options case, if possible
 
 		let mut score_cache: HashMap<u64, f64> = HashMap::new();
 		let mut highest_score: f64 = 0.0;
-		let mut best_option_index: usize = 0;
+		let mut best_option: &MoveOption = &options[0];
 		io::stdout().flush().unwrap();
-		for (option_index, option) in options.iter().enumerate() {
-			let score = self.evaluate_move(&option, 7, &mut score_cache);
+		for option in options.iter() {
+			let score = self.evaluate_move(&option, 5, &mut score_cache);
 			if score > highest_score {
 				highest_score = score;
-				best_option_index = option_index;
+				best_option = &option;
 			}
 			print!(".");
 			io::stdout().flush().unwrap();
 		}
-		println!("\nBot's move: {} (Score is {})", options[best_option_index], highest_score);
-		self.make_move(&options[best_option_index]);
+		println!("\nBot's move: {} (Score is {})", *best_option, highest_score);
+		self.make_move(&best_option);
 	}
 
 	fn make_human_move(&mut self) {
