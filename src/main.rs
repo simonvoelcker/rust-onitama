@@ -34,6 +34,7 @@ fn main() {
 	loop {
 	    println!("{}", game);
 	    &game.run_turn();
+
 	    if let GameResult::DecidedWithWinner(_) = game.get_result() {
 	    	println!("The game is over!");
 		    println!("{}", game);

@@ -149,15 +149,15 @@ impl Game {
 
 	fn make_bot_move(&mut self) {
 	    let options: Vec<MoveOption> = self.get_all_options();
-		print!("Bot has {} options. Thinking.", options.len());
-		// TODO handle ZERO options case, if possible
+	    let depth: usize = self.propose_evaluation_depth(5000000);
+		print!("Bot has {} options. Evaluating (depth {}) .", options.len(), depth);
 
 		let mut score_cache: HashMap<u64, f64> = HashMap::new();
 		let mut highest_score: f64 = 0.0;
 		let mut best_option: &MoveOption = &options[0];
 		io::stdout().flush().unwrap();
 		for option in options.iter() {
-			let score = self.evaluate_move(&option, 5, &mut score_cache);
+			let score = self.evaluate_move(&option, depth, &mut score_cache);
 			if score > highest_score {
 				highest_score = score;
 				best_option = &option;
@@ -165,7 +165,7 @@ impl Game {
 			print!(".");
 			io::stdout().flush().unwrap();
 		}
-		println!("\nBot's move: {} (Score is {})", *best_option, highest_score);
+		println!("\nBot's move: {} (Score is {:.1})", *best_option, highest_score);
 		self.make_move(&best_option);
 	}
 
@@ -206,7 +206,7 @@ impl Game {
 		GameResult::Undecided
 	}
 
-	pub fn evaluate_move(&mut self, option: &MoveOption, depth: usize, score_cache: &mut HashMap<u64, f64>) -> f64 {
+	fn evaluate_move(&mut self, option: &MoveOption, depth: usize, score_cache: &mut HashMap<u64, f64>) -> f64 {
 		self.make_move(option);
 		let score;
 
@@ -244,6 +244,36 @@ impl Game {
 
 		self.undo_move(option);
 		score
+	}
+
+	fn count_options(&mut self, depth: usize) -> u64 {
+		if depth == 0 {
+			return 1;
+		}
+		if let GameResult::DecidedWithWinner(_) = self.get_result() {
+			return 1;
+		}
+		let mut total_options: u64 = 0;
+	    for option in self.get_all_options().iter() {
+	    	self.make_move(option);
+	    	total_options += self.count_options(depth-1);
+	    	self.undo_move(option);
+	    }
+	    total_options
+	}
+
+	fn propose_evaluation_depth(&mut self, max_total_options: u64) -> usize {
+		// check how many positions can be reached in 4 steps,
+		// compute how many steps can be evaluated exhaustively.
+		let options_per_level: f64 = (self.count_options(4) as f64).powf(0.25);
+		let num_levels: usize = (max_total_options as f64).log(options_per_level).floor() as usize;
+		if num_levels < 4 {
+			return 4;
+		}
+		if num_levels > 12 {
+			return 12;
+		}
+		num_levels
 	}
 }
 
