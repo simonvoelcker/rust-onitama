@@ -50,18 +50,6 @@ impl Field {
         false
 	}
 
-	pub fn get_all_pieces(&self, player: usize) -> Vec<(&'static Piece, Position)> {
-		let mut pieces: Vec<(&'static Piece, Position)> = Vec::new();
-		for field_index in 0..25 {
-	        if let Some(piece) = &self.pieces[field_index] {
-				if piece.player == player {
-					pieces.push((piece, Position::from_field_index(field_index)));
-				}
-	        }
-		}
-		pieces
-	}
-
 	pub fn get_piece_balance(&self, player: usize) -> isize {
 		let mut balance: isize = 0;
 		for field_index in 0..25 {

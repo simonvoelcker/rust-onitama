@@ -2,6 +2,7 @@ use std::io;
 use std::io::Write;
 use std::{fmt, cmp, hash};
 use std::collections::HashMap;
+use rand::seq::SliceRandom;
 
 use crate::field::Field;
 use crate::card::Card;
@@ -61,7 +62,7 @@ impl Game {
 			self.players[1].cards[0],
 			self.players[1].cards[1],
 		];
-		cards.sort();  // TODO sorting references may not act as I hope it will
+		cards.sort();
 		for card in cards.iter() {
 			if card == &self.public_card {
 				compressed = compressed << 2;
@@ -75,11 +76,14 @@ impl Game {
 	}
 
 	pub fn get_all_options(&self) -> Vec<MoveOption> {
-		let pieces: Vec<(&'static Piece, Position)> = self.field.get_all_pieces(self.current_player);
 		let cards = &self.players[self.current_player].cards;
-		
 		let mut options: Vec<MoveOption> = Vec::new();
-		for (_piece, position) in pieces.iter() {
+
+		for field_index in 0..25 {
+			let position = Position::from_field_index(field_index);
+			if !self.field.occupied_by(&position, self.current_player) {
+				continue;
+			}		
 			for card in cards.iter() {
 				for offset in card.get_offsets(self.current_player == 1).iter() {
 					let target_position = position.offset(offset);
@@ -148,7 +152,10 @@ impl Game {
 	}
 
 	fn make_bot_move(&mut self) {
-	    let options: Vec<MoveOption> = self.get_all_options();
+	    let mut options: Vec<MoveOption> = self.get_all_options();
+		let mut rng = &mut rand::thread_rng();
+		options.shuffle(&mut rng);
+
 	    let depth: usize = self.propose_evaluation_depth(5000000);
 		print!("Bot has {} options. Evaluating (depth {}) .", options.len(), depth);
 
