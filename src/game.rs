@@ -1,3 +1,5 @@
+use std::io;
+use std::io::Write;
 use std::{fmt, cmp, hash};
 use std::collections::HashMap;
 
@@ -135,6 +137,56 @@ impl Game {
 		let piece: Option<&'static Piece> = self.field.get_piece(&option.target_position);
 	    self.field.set_piece(&option.from_position, piece);
 	    self.field.set_piece(&option.target_position, option.target_piece);
+	}
+
+	pub fn run_turn(&mut self) {
+		if self.players[self.current_player].is_bot {
+			self.make_bot_move();
+		} else {
+			self.make_human_move();
+		}
+	}
+
+	fn make_bot_move(&mut self) {
+	    let options: Vec<MoveOption> = self.get_all_options();
+		print!("Bot has {} options. Thinking.", options.len());
+
+		let mut score_cache: HashMap<u64, f64> = HashMap::new();
+		let mut highest_score: f64 = 0.0;
+		let mut best_option_index: usize = 0;
+		io::stdout().flush().unwrap();
+		for (option_index, option) in options.iter().enumerate() {
+			let score = self.evaluate_move(&option, 7, &mut score_cache);
+			if score > highest_score {
+				highest_score = score;
+				best_option_index = option_index;
+			}
+			print!(".");
+			io::stdout().flush().unwrap();
+		}
+		println!("\nBot's move: {} (Score is {})", options[best_option_index], highest_score);
+		self.make_move(&options[best_option_index]);
+	}
+
+	fn make_human_move(&mut self) {
+	    let options: Vec<MoveOption> = self.get_all_options();
+		println!("You have {} options:", options.len());
+	    for (option_index, option) in options.iter().enumerate() {
+		    println!("Option {:2}: {}", option_index+1, option);
+	    }
+
+	    let mut choice = 0;
+	    while choice < 1 || choice > options.len() {
+		    print!("Choose option: ");
+		    io::stdout().flush().unwrap();
+		    let mut input = String::new();
+		    io::stdin().read_line(&mut input).unwrap();
+		    match input.trim().parse() {
+		    	Ok(num) => {choice = num},
+		    	Err(_) => {choice = 0},
+		    };
+	    }
+	    self.make_move(&options[choice-1]);
 	}
 
 	pub fn get_result(&self) -> GameResult {

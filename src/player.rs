@@ -7,6 +7,7 @@ use crate::card::Card;
 pub struct Player {
 	pub name: &'static str,
 	pub cards: [&'static Card; 2],
+	pub is_bot: bool,
 }
 
 impl fmt::Display for Player {
