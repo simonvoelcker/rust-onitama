@@ -6,8 +6,18 @@ mod game;
 mod player;
 mod move_option;
 
-use std::env;
+use std::{env, process};
 use game::{Game, GameType, GameResult};
+
+fn int_or_bust(s: &String) -> u64 {
+	match s.parse() {
+		Ok(i) => { i },
+		Err(_) => {
+			println!("Integer expected.");
+			process::exit(1);
+		}
+	}
+}
 
 fn main() {
 	let args: Vec<String> = env::args().collect();
@@ -16,16 +26,17 @@ fn main() {
 			Game::new(GameType::HumanVsHuman)
 		},
 		2 => {
-			let strength = args[1].parse().expect("Integer expected");
+			let strength = int_or_bust(&args[1]);
 			Game::new(GameType::HumanVsBot(strength))
 		},
 		3 => {
-			let strength1 = args[1].parse().expect("Integer expected");
-			let strength2 = args[2].parse().expect("Integer expected");
+			let strength1 = int_or_bust(&args[1]);
+			let strength2 = int_or_bust(&args[2]);
 			Game::new(GameType::BotVsBot((strength1, strength2)))
 		},
 		_ => {
-			panic!("Unexpected arguments. Provide at most 2 integers.")
+			println!("Bad arguments.");
+			process::exit(1);
 		}
 	};
 
