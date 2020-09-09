@@ -1,23 +1,21 @@
 use std::io;
 use std::io::Write;
-use std::{fmt, cmp, hash};
+use std::fmt;
 use std::collections::HashMap;
 use rand::seq::SliceRandom;
 
 use crate::field::Field;
-use crate::card::Card;
+use crate::card::{Card, CARDS};
 use crate::player::Player;
-use crate::position::Position;
 use crate::piece::Piece;
+use crate::position::Position;
 use crate::move_option::MoveOption;
 
-
-#[derive(hash::Hash, cmp::PartialEq, cmp::Eq)]
 pub struct Game {
-	pub field: Field,
-	pub players: [Player; 2],
-	pub public_card: &'static Card,
-	pub current_player: usize,
+	field: Field,
+	players: [Player; 2],
+	public_card: &'static Card,
+	current_player: usize,
 }
 
 pub enum GameResult {
@@ -25,54 +23,45 @@ pub enum GameResult {
 	Undecided,
 }
 
-static PIECES: [Piece; 10] = Piece::get_all_pieces();
+pub enum GameType {
+	HumanVsHuman,
+	HumanVsBot(u64),		// bot strength
+	BotVsBot((u64, u64)),	// bot strengths
+}
 
 impl Game {
-	pub fn new(players: [Player; 2], public_card: &'static Card) -> Self {
-		let player_0_starts = players[0].name.starts_with(&public_card.color);
-		let pieces = [
-			&PIECES[0], &PIECES[1], &PIECES[2], &PIECES[3], &PIECES[4],
-			&PIECES[5], &PIECES[6], &PIECES[7], &PIECES[8], &PIECES[9],
+	pub fn new(game_type: GameType) -> Self {
+		let mut rng = &mut rand::thread_rng();
+		let mut indices: Vec<usize> = (0..16).collect();
+		indices.shuffle(&mut rng);
+
+		let player1_cards = [&CARDS[indices[0]], &CARDS[indices[1]]];
+		let player2_cards = [&CARDS[indices[2]], &CARDS[indices[3]]];
+		let public_card = &CARDS[indices[4]];
+
+		let player1_bot_strength: Option<u64> = match game_type {
+			GameType::HumanVsHuman => { None },
+			GameType::HumanVsBot(_) => { None },
+			GameType::BotVsBot((strength, _)) => { Some(strength) },
+		};
+		let player2_bot_strength: Option<u64> = match game_type {
+			GameType::HumanVsHuman => { None },
+			GameType::HumanVsBot(strength) => { Some(strength) },
+			GameType::BotVsBot((_, strength)) => { Some(strength) },
+		};
+
+		let players: [Player; 2] = [
+			Player {name: "Blue player", cards: player1_cards, bot_strength: player1_bot_strength},
+			Player {name: "Red player", cards: player2_cards, bot_strength: player2_bot_strength},
 		];
+		let player_0_starts = players[0].name.starts_with(&public_card.color);
+
 		Self {
-			field: Field::new(pieces),
+			field: Field::new(),
 			players,
 			public_card,
 			current_player: if player_0_starts {0} else {1},
 		}
-	}
-
-	pub fn compress(&self) -> u64 {
-		// produce a compressed representation of the game. result fits into 64 bits.
-		// current player is 1 bit, the cards 10 bits, the field 45 bits.
-		let mut compressed: u64 = self.current_player as u64;
-		compressed = (compressed << 10) | self.compress_cards();
-		compressed = (compressed << 45) | self.field.compress();
-		compressed
-	}
-
-	fn compress_cards(&self) -> u64 {
-		let mut compressed: u64 = 0;
-		// cards selection fits into 10 bits: given the sorted list of all cards in the game,
-		// each card is either public, or player 1's, or player 2's (=2 bit each).
-		let mut cards: [&'static Card; 5] = [
-			self.public_card,
-			self.players[0].cards[0],
-			self.players[0].cards[1],
-			self.players[1].cards[0],
-			self.players[1].cards[1],
-		];
-		cards.sort();
-		for card in cards.iter() {
-			if card == &self.public_card {
-				compressed = compressed << 2;
-			} else if card == &self.players[0].cards[0] || card == &self.players[0].cards[1] {
-				compressed = (compressed << 2) | 0x02;
-			} else {
-				compressed = (compressed << 2) | 0x03;
-			}
-		}
-		compressed
 	}
 
 	pub fn get_all_options(&self) -> Vec<MoveOption> {
@@ -104,6 +93,22 @@ impl Game {
 			}
 		}
 		options
+	}
+
+	pub fn get_result(&self) -> GameResult {
+		for (player_index, _player) in self.players.iter().enumerate() {
+			match self.field.get_master_position(player_index) {
+				Some(position) => {
+					if position.x == 2 && position.y == (1-player_index as isize) * 4 {
+						return GameResult::DecidedWithWinner(player_index);
+					}
+				},
+				None => {
+					return GameResult::DecidedWithWinner(1-player_index);
+				},
+			};
+		}
+		GameResult::Undecided
 	}
 
 	pub fn make_move(&mut self, option: &MoveOption) {
@@ -144,19 +149,55 @@ impl Game {
 	}
 
 	pub fn run_turn(&mut self) {
-		if self.players[self.current_player].is_bot {
-			self.make_bot_move();
-		} else {
-			self.make_human_move();
-		}
+		match self.players[self.current_player].bot_strength {
+			Some(strength) => {
+				self.make_bot_move(strength);
+			},
+			None => {
+				self.make_human_move();
+			},
+		};
 	}
 
-	fn make_bot_move(&mut self) {
+	fn get_hash(&self) -> u64 {
+		// produce a compressed representation of the game. result fits into 64 bits.
+		// current player is 1 bit, the cards 10 bits, the field 45 bits.
+		let mut compressed: u64 = self.current_player as u64;
+		compressed = (compressed << 10) | self.get_cards_hash();
+		compressed = (compressed << 45) | self.field.compress();
+		compressed
+	}
+
+	fn get_cards_hash(&self) -> u64 {
+		let mut compressed: u64 = 0;
+		// cards selection fits into 10 bits: given the sorted list of all cards in the game,
+		// each card is either public, or player 1's, or player 2's (=2 bit each).
+		let mut cards: [&'static Card; 5] = [
+			self.public_card,
+			self.players[0].cards[0],
+			self.players[0].cards[1],
+			self.players[1].cards[0],
+			self.players[1].cards[1],
+		];
+		cards.sort();
+		for card in cards.iter() {
+			if card == &self.public_card {
+				compressed = compressed << 2;
+			} else if card == &self.players[0].cards[0] || card == &self.players[0].cards[1] {
+				compressed = (compressed << 2) | 0x02;
+			} else {
+				compressed = (compressed << 2) | 0x03;
+			}
+		}
+		compressed
+	}
+
+	fn make_bot_move(&mut self, bot_strength: u64) {
 	    let mut options: Vec<MoveOption> = self.get_all_options();
 		let mut rng = &mut rand::thread_rng();
 		options.shuffle(&mut rng);
 
-	    let depth: usize = self.propose_evaluation_depth(5000000);
+	    let depth: usize = self.propose_evaluation_depth(bot_strength);
 		print!("Bot has {} options. Evaluating (depth {}) .", options.len(), depth);
 
 		let mut score_cache: HashMap<u64, f64> = HashMap::new();
@@ -197,22 +238,6 @@ impl Game {
 	    self.make_move(&options[choice-1]);
 	}
 
-	pub fn get_result(&self) -> GameResult {
-		for (player_index, _player) in self.players.iter().enumerate() {
-			match self.field.get_master_position(player_index) {
-				Some(position) => {
-					if position.x == 2 && position.y == (1-player_index as isize) * 4 {
-						return GameResult::DecidedWithWinner(player_index);
-					}
-				},
-				None => {
-					return GameResult::DecidedWithWinner(1-player_index);
-				},
-			};
-		}
-		GameResult::Undecided
-	}
-
 	fn evaluate_move(&mut self, option: &MoveOption, depth: usize, score_cache: &mut HashMap<u64, f64>) -> f64 {
 		self.make_move(option);
 		let score;
@@ -224,7 +249,7 @@ impl Game {
 			},
 			GameResult::Undecided => {
 				if depth > 1 {
-					let cache_key = self.compress();
+					let cache_key = self.get_hash();
 					if score_cache.contains_key(&cache_key) {
 						score = *score_cache.get(&cache_key).unwrap();
 					} else {

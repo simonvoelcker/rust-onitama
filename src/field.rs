@@ -1,19 +1,34 @@
-use std::{fmt, cmp, hash};
+use std::{fmt, cmp};
 
 use crate::piece::Piece;
 use crate::position::Position;
 
-#[derive(hash::Hash, cmp::PartialEq, cmp::Eq)]
+
+#[derive(cmp::PartialEq, cmp::Eq)]
 pub struct Field {
-	pub pieces: [Option<&'static Piece>; 25],
+	pieces: [Option<&'static Piece>; 25],
 }
 
+static PIECES: [Piece; 10] = [
+	Piece {player: 0, is_master: false},
+	Piece {player: 0, is_master: false},
+	Piece {player: 0, is_master: true},
+	Piece {player: 0, is_master: false},
+	Piece {player: 0, is_master: false},
+	Piece {player: 1, is_master: false},
+	Piece {player: 1, is_master: false},
+	Piece {player: 1, is_master: true},
+	Piece {player: 1, is_master: false},
+	Piece {player: 1, is_master: false},
+];
+
+
 impl Field {
-	pub fn new(pieces: [&'static Piece; 10]) -> Self {
+	pub fn new() -> Self {
 		let mut field = Self {pieces: Default::default()};
 		for col in 0..5 {
-            field.set_piece(&Position {x: col, y: 0}, Some(pieces[col as usize]));
-            field.set_piece(&Position {x: col, y: 4}, Some(pieces[col as usize + 5]));
+            field.set_piece(&Position {x: col, y: 0}, Some(&PIECES[col as usize]));
+            field.set_piece(&Position {x: col, y: 4}, Some(&PIECES[col as usize + 5]));
 		}
 		field
 	}

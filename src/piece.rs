@@ -1,26 +1,9 @@
-use std::{fmt, cmp, hash};
+use std::{fmt, cmp};
 
-#[derive(cmp::PartialEq, cmp::Eq, hash::Hash)]
+#[derive(cmp::PartialEq, cmp::Eq)]
 pub struct Piece {
 	pub player: usize,
 	pub is_master: bool,
-}
-
-impl Piece {
-	pub const fn get_all_pieces() -> [Piece; 10] {
-		return [
-			Piece {player: 0, is_master: false},
-			Piece {player: 0, is_master: false},
-			Piece {player: 0, is_master: true},
-			Piece {player: 0, is_master: false},
-			Piece {player: 0, is_master: false},
-			Piece {player: 1, is_master: false},
-			Piece {player: 1, is_master: false},
-			Piece {player: 1, is_master: true},
-			Piece {player: 1, is_master: false},
-			Piece {player: 1, is_master: false},
-		]
-	}
 }
 
 impl fmt::Display for Piece {

@@ -1,13 +1,13 @@
-use std::{fmt, cmp, hash};
+use std::{fmt, cmp};
 
 use crate::card::Card;
 
 
-#[derive(hash::Hash, cmp::PartialEq, cmp::Eq)]
+#[derive(cmp::PartialEq, cmp::Eq)]
 pub struct Player {
 	pub name: &'static str,
 	pub cards: [&'static Card; 2],
-	pub is_bot: bool,
+	pub bot_strength: Option<u64>,
 }
 
 impl fmt::Display for Player {
