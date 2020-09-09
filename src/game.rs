@@ -51,16 +51,16 @@ impl Game {
 		};
 
 		let players: [Player; 2] = [
-			Player {name: "Blue player", cards: player1_cards, bot_strength: player1_bot_strength},
-			Player {name: "Red player", cards: player2_cards, bot_strength: player2_bot_strength},
+			Player {color: "Blue", cards: player1_cards, bot_strength: player1_bot_strength},
+			Player {color: "Red", cards: player2_cards, bot_strength: player2_bot_strength},
 		];
-		let player_0_starts = players[0].name.starts_with(&public_card.color);
+		let current_player = if players[0].color == public_card.color {0} else {1};
 
 		Self {
 			field: Field::new(),
 			players,
 			public_card,
-			current_player: if player_0_starts {0} else {1},
+			current_player,
 		}
 	}
 
