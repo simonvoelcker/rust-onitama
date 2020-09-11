@@ -10,6 +10,7 @@ edition = "2018"
 rand = "0.7.3"
 warp = "0.2.5"
 tokio = { version = "0.2", features = ["full"] }
+rusqlite = { version = "0.24.0", features = ["bundled"] }
 
 [[bin]]
 name = "cli"
