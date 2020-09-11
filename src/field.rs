@@ -1,10 +1,11 @@
 use std::{fmt, cmp};
+use serde::Serialize;
 
 use crate::piece::Piece;
 use crate::position::Position;
 
 
-#[derive(cmp::PartialEq, cmp::Eq)]
+#[derive(cmp::PartialEq, cmp::Eq, Serialize)]
 pub struct Field {
 	pieces: [Option<&'static Piece>; 25],
 }

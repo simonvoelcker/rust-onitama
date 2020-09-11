@@ -3,6 +3,7 @@ use std::io::Write;
 use std::fmt;
 use std::collections::HashMap;
 use rand::seq::SliceRandom;
+use serde::Serialize;
 
 use crate::field::Field;
 use crate::card::{Card, CARDS};
@@ -11,6 +12,7 @@ use crate::piece::Piece;
 use crate::position::Position;
 use crate::move_option::MoveOption;
 
+#[derive(Serialize)]
 pub struct Game {
 	field: Field,
 	players: [Player; 2],

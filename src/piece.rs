@@ -1,6 +1,7 @@
 use std::{fmt, cmp};
+use serde::Serialize;
 
-#[derive(cmp::PartialEq, cmp::Eq)]
+#[derive(cmp::PartialEq, cmp::Eq, Serialize)]
 pub struct Piece {
 	pub player: usize,
 	pub is_master: bool,

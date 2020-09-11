@@ -1,8 +1,10 @@
 use std::{fmt, cmp};
 use std::cmp::Ordering;
+use serde::Serialize;
 
 use crate::position::Offset;
 
+#[derive(Serialize)]
 pub struct Card {
 	pub name: &'static str,
 	pub color: &'static str,
