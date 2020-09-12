@@ -1,6 +1,6 @@
 use std::{fmt, cmp};
 use std::cmp::Ordering;
-use serde::Serialize;
+use serde::{Serialize};
 
 use crate::position::Offset;
 

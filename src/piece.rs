@@ -1,5 +1,5 @@
 use std::{fmt, cmp};
-use serde::Serialize;
+use serde::{Serialize};
 
 #[derive(cmp::PartialEq, cmp::Eq, Serialize)]
 pub struct Piece {

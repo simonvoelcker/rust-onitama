@@ -1,9 +1,11 @@
 use std::fmt;
+use serde::{Serialize};
 
 use crate::position::Position;
 use crate::card::Card;
 use crate::piece::Piece;
 
+#[derive(Serialize)]
 pub struct MoveOption {
 	pub from_position: Position,
 	pub card: &'static Card,

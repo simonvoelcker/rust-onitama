@@ -3,7 +3,7 @@ use std::io::Write;
 use std::fmt;
 use std::collections::HashMap;
 use rand::seq::SliceRandom;
-use serde::Serialize;
+use serde::{Serialize};
 
 use crate::field::Field;
 use crate::card::{Card, CARDS};
@@ -166,7 +166,7 @@ impl Game {
 		// current player is 1 bit, the cards 10 bits, the field 45 bits.
 		let mut compressed: u64 = self.current_player as u64;
 		compressed = (compressed << 10) | self.get_cards_hash();
-		compressed = (compressed << 45) | self.field.compress();
+		compressed = (compressed << 45) | self.field.pack();
 		compressed
 	}
 

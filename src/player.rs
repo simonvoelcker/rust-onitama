@@ -1,5 +1,5 @@
 use std::{fmt, cmp};
-use serde::Serialize;
+use serde::{Serialize};
 
 use crate::card::Card;
 
