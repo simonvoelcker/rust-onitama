@@ -161,6 +161,15 @@ impl Game {
 		};
 	}
 
+	pub fn run_turn_if_bot(&mut self) {
+		match self.players[self.current_player].bot_strength {
+			Some(strength) => {
+				self.make_bot_move(strength);
+			},
+			None => {},
+		};
+	}
+
 	fn get_hash(&self) -> u64 {
 		// produce a compressed representation of the game. result fits into 64 bits.
 		// current player is 1 bit, the cards 10 bits, the field 45 bits.
