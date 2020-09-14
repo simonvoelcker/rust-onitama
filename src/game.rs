@@ -6,7 +6,7 @@ use rand::seq::SliceRandom;
 use serde::{Serialize};
 
 use crate::field::Field;
-use crate::card::{Card, CARDS};
+use crate::card::{Card, get_card_by_index};
 use crate::player::Player;
 use crate::piece::Piece;
 use crate::position::Position;
@@ -16,7 +16,7 @@ use crate::move_option::MoveOption;
 pub struct Game {
 	field: Field,
 	players: [Player; 2],
-	public_card: &'static Card,
+	public_card: Card,
 	current_player: usize,
 }
 
@@ -37,9 +37,9 @@ impl Game {
 		let mut indices: Vec<usize> = (0..16).collect();
 		indices.shuffle(&mut rng);
 
-		let player1_cards = [&CARDS[indices[0]], &CARDS[indices[1]]];
-		let player2_cards = [&CARDS[indices[2]], &CARDS[indices[3]]];
-		let public_card = &CARDS[indices[4]];
+		let player1_cards = [get_card_by_index(indices[0]), get_card_by_index(indices[1])];
+		let player2_cards = [get_card_by_index(indices[2]), get_card_by_index(indices[3])];
+		let public_card = get_card_by_index(indices[4]);
 
 		let player1_bot_strength: Option<u64> = match game_type {
 			GameType::HumanVsHuman => { None },
@@ -86,10 +86,10 @@ impl Game {
 					}
                     options.push(MoveOption {
                     	from_position: position.clone(),
-                    	card: card,
+                    	card: card.clone(),
                     	target_position: target_position.clone(),
                     	target_piece: self.field.get_piece(&target_position),
-                    	public_card: self.public_card,
+                    	public_card: self.public_card.clone(),
                     });
 				}
 			}
@@ -121,11 +121,11 @@ impl Game {
 
 	    // move cards
 	    if self.players[self.current_player].cards[0] == option.card {
-		    self.players[self.current_player].cards[0] = self.public_card;
+		    self.players[self.current_player].cards[0] = self.public_card.clone();
 	    } else {
-		    self.players[self.current_player].cards[1] = self.public_card;
+		    self.players[self.current_player].cards[1] = self.public_card.clone();
 	    }
-	    self.public_card = option.card;
+	    self.public_card = option.card.clone();
 
 	    // change active player
 	    self.current_player = 1-self.current_player;
@@ -137,11 +137,11 @@ impl Game {
 
 	    // move cards back
 	    if self.players[self.current_player].cards[0] == option.public_card {
-		    self.public_card = self.players[self.current_player].cards[0];
-		    self.players[self.current_player].cards[0] = option.card;
+		    self.public_card = self.players[self.current_player].cards[0].clone();
+		    self.players[self.current_player].cards[0] = option.card.clone();
 	    } else {
-		    self.public_card = self.players[self.current_player].cards[1];
-		    self.players[self.current_player].cards[1] = option.card;
+		    self.public_card = self.players[self.current_player].cards[1].clone();
+		    self.players[self.current_player].cards[1] = option.card.clone();
 	    }
 
 		// move pieces back
@@ -174,18 +174,18 @@ impl Game {
 		let mut compressed: u64 = 0;
 		// cards selection fits into 10 bits: given the sorted list of all cards in the game,
 		// each card is either public, or player 1's, or player 2's (=2 bit each).
-		let mut cards: [&'static Card; 5] = [
-			self.public_card,
-			self.players[0].cards[0],
-			self.players[0].cards[1],
-			self.players[1].cards[0],
-			self.players[1].cards[1],
+		let mut cards: [&Card; 5] = [
+			&self.public_card,
+			&self.players[0].cards[0],
+			&self.players[0].cards[1],
+			&self.players[1].cards[0],
+			&self.players[1].cards[1],
 		];
 		cards.sort();
 		for card in cards.iter() {
-			if card == &self.public_card {
+			if *card == &self.public_card {
 				compressed = compressed << 2;
-			} else if card == &self.players[0].cards[0] || card == &self.players[0].cards[1] {
+			} else if *card == &self.players[0].cards[0] || *card == &self.players[0].cards[1] {
 				compressed = (compressed << 2) | 0x02;
 			} else {
 				compressed = (compressed << 2) | 0x03;

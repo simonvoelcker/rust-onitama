@@ -1,12 +1,12 @@
 use std::{fmt, cmp};
-use serde::{Serialize};
+use serde::{Serialize, Deserialize};
 
 use crate::card::Card;
 
-#[derive(cmp::PartialEq, cmp::Eq, Serialize)]
+#[derive(cmp::PartialEq, cmp::Eq, Serialize, Deserialize)]
 pub struct Player {
 	pub color: &'static str,
-	pub cards: [&'static Card; 2],
+	pub cards: [Card; 2],
 	pub bot_strength: Option<u64>,
 }
 

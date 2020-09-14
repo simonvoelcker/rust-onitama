@@ -1,7 +1,7 @@
 use std::fmt;
-use serde::{Serialize};
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Position {
 	pub x: isize,
 	pub y: isize

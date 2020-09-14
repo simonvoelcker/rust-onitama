@@ -8,11 +8,11 @@ use crate::piece::Piece;
 #[derive(Serialize)]
 pub struct MoveOption {
 	pub from_position: Position,
-	pub card: &'static Card,
+	pub card: Card,
 	pub target_position: Position,
 	// necessary for reversal of move
 	pub target_piece: Option<Piece>,
-	pub public_card: &'static Card,
+	pub public_card: Card,
 }
 
 impl fmt::Display for MoveOption {

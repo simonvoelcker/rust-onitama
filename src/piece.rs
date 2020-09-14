@@ -1,7 +1,7 @@
 use std::{fmt, cmp};
-use serde::{Serialize};
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone, cmp::PartialEq, cmp::Eq, Serialize)]
+#[derive(Clone, cmp::PartialEq, cmp::Eq, Serialize, Deserialize)]
 pub struct Piece {
 	pub player: usize,
 	pub is_master: bool,
