@@ -38,7 +38,19 @@ pub fn list_options(game_id: u32) -> String {
 }
 
 pub fn pick_option(game_id: u32, option_index: u32) -> String {
-	format!("{}-{}", game_id, option_index)
+	match load_game(game_id) {
+		Ok(game_string) => {
+			let mut game: Game = from_str(&game_string).unwrap();
+			let options: Vec<MoveOption> = game.get_all_options();
+			if (option_index as usize) >= options.len() {
+				return "Out of bounds".to_string();
+			}
+			game.make_move(&options[option_index as usize]);
+			// TODO persist game, need update query
+			return json!(game).to_string();
+		},
+		Err(_) => { return "An error ocurred".to_string(); },
+	}
 }
 
 pub fn do_nonsense() -> String {
