@@ -12,7 +12,7 @@ fn open_db() -> Connection {
     conn
 }
 
-pub fn save_game(game_string: &str) -> Result<u32> {
+pub fn create_game_entry(game_string: &str) -> Result<u32> {
     let conn = open_db();
     conn.execute(
         "INSERT INTO games (game) VALUES (?1)",
@@ -38,3 +38,11 @@ pub fn load_game(game_id: u32) -> Result<String> {
     conn.query_row("SELECT game FROM games WHERE id = ?1", params![game_id], |row| row.get(0))
 }
 
+pub fn save_game(game_id: u32, game_string: &str) -> Result<()> {
+    let conn = open_db();
+    conn.execute(
+        "UPDATE games SET game = ?1 WHERE id = ?2",
+        params![game_string, game_id],
+    )?;
+    Ok(())
+}
