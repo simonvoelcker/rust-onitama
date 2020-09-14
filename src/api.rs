@@ -37,6 +37,10 @@ pub fn list_options(game_id: u32) -> String {
 	}
 }
 
+pub fn pick_option(game_id: u32, option_index: u32) -> String {
+	format!("{}-{}", game_id, option_index)
+}
+
 pub fn do_nonsense() -> String {
 	let mut game = Game::new(GameType::HumanVsHuman);
     &game.run_turn();	
