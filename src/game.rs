@@ -115,7 +115,7 @@ impl Game {
 
 	pub fn make_move(&mut self, option: &MoveOption) {
 		// move piece
-		let piece: Option<&'static Piece> = self.field.get_piece(&option.from_position);
+		let piece: Option<Piece> = self.field.get_piece(&option.from_position);
 	    self.field.set_piece(&option.target_position, piece);
 	    self.field.set_piece(&option.from_position, None);
 
@@ -145,9 +145,9 @@ impl Game {
 	    }
 
 		// move pieces back
-		let piece: Option<&'static Piece> = self.field.get_piece(&option.target_position);
+		let piece: Option<Piece> = self.field.get_piece(&option.target_position);
 	    self.field.set_piece(&option.from_position, piece);
-	    self.field.set_piece(&option.target_position, option.target_piece);
+	    self.field.set_piece(&option.target_position, option.target_piece.clone());
 	}
 
 	pub fn run_turn(&mut self) {
