@@ -1,13 +1,13 @@
 use std::fmt;
-use serde::{Serialize};
+use serde::{Serialize, Deserialize};
 
 use crate::position::Position;
 use crate::card::Card;
 use crate::piece::Piece;
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct MoveOption {
-	pub from_position: Position,
+	pub from_position: Position,	
 	pub card: Card,
 	pub target_position: Position,
 	// necessary for reversal of move

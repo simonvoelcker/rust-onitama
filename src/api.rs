@@ -1,5 +1,6 @@
-use serde_json::json;
+use serde_json::{json, from_str};
 use crate::game::{Game, GameType};
+use crate::move_option::MoveOption;
 use crate::db::{save_game, list_game_ids, load_game};
 
 pub fn create_game() -> String {
@@ -27,11 +28,10 @@ pub fn get_game(game_id: u32) -> String {
 
 pub fn list_options(game_id: u32) -> String {
 	match load_game(game_id) {
-		Ok(_game_string) => {
-			// let game: Game = from_str(&game_string).unwrap();
-			// let options: Vec<MoveOption> = game.get_all_options();
-			// return json!(options).to_string();
-			return "".to_string();
+		Ok(game_string) => {
+			let game: Game = from_str(&game_string).unwrap();
+			let options: Vec<MoveOption> = game.get_all_options();
+			return json!(options).to_string();
 		},
 		Err(_) => { return "An error ocurred".to_string(); },
 	}

@@ -6,8 +6,8 @@ use crate::position::Offset;
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Card {
-	pub name: &'static str,
-	pub color: &'static str,
+	pub name: String,
+	pub color: String,
 	pub moves: u32,
 }
 
@@ -77,83 +77,83 @@ const MOVE_BR:   u32 = 1 << 18;
 pub fn get_card_by_index(index: usize) -> Card {
 	[
 		Card {
-			name: "Affe",
-			color: "Blue",
+			name: "Affe".to_string(),
+			color: "Blue".to_string(),
 			moves: MOVE_FL | MOVE_FR | MOVE_BL | MOVE_BR,
 		},
 		Card {
-			name: "Drache",
-			color: "Red",
+			name: "Drache".to_string(),
+			color: "Red".to_string(),
 			moves: MOVE_FLL | MOVE_FRR | MOVE_BL | MOVE_BR,
 		},
 		Card {
-			name: "Elefant",
-			color: "Red",
+			name: "Elefant".to_string(),
+			color: "Red".to_string(),
 			moves: MOVE_FL | MOVE_FR | MOVE_L | MOVE_R,
 		},
 		Card {
-			name: "Krabbe",
-			color: "Blue",
+			name: "Krabbe".to_string(),
+			color: "Blue".to_string(),
 			moves: MOVE_F | MOVE_LL | MOVE_RR,
 		},
 		Card {
-			name: "Tiger",
-			color: "Blue",
+			name: "Tiger".to_string(),
+			color: "Blue".to_string(),
 			moves: MOVE_FF | MOVE_B,
 		},
 		Card {
-			name: "Gans",
-			color: "Blue",
+			name: "Gans".to_string(),
+			color: "Blue".to_string(),
 			moves: MOVE_FL | MOVE_L | MOVE_R | MOVE_BR,
 		},
 		Card {
-			name: "Hahn",
-			color: "Red",
+			name: "Hahn".to_string(),
+			color: "Red".to_string(),
 			moves: MOVE_FR | MOVE_L | MOVE_R | MOVE_BL,
 		},
 		Card {
-			name: "Ochse",
-			color: "Blue",
+			name: "Ochse".to_string(),
+			color: "Blue".to_string(),
 			moves: MOVE_F | MOVE_R | MOVE_B,
 		},
 		Card {
-			name: "Pferd",
-			color: "Red",
+			name: "Pferd".to_string(),
+			color: "Red".to_string(),
 			moves: MOVE_F | MOVE_L | MOVE_B,
 		},
 		Card {
-			name: "Wildschwein",
-			color: "Red",
+			name: "Wildschwein".to_string(),
+			color: "Red".to_string(),
 			moves: MOVE_F | MOVE_L | MOVE_R,
 		},
 		Card {
-			name: "Aal",
-			color: "Blue",
+			name: "Aal".to_string(),
+			color: "Blue".to_string(),
 			moves: MOVE_FL | MOVE_R | MOVE_BL,
 		},
 		Card {
-			name: "Gottesanbeterin",
-			color: "Red",
+			name: "Gottesanbeterin".to_string(),
+			color: "Red".to_string(),
 			moves: MOVE_FL | MOVE_FR | MOVE_B,
 		},
 		Card {
-			name: "Kobra",
-			color: "Red",
+			name: "Kobra".to_string(),
+			color: "Red".to_string(),
 			moves: MOVE_FR | MOVE_L | MOVE_BR,
 		},
 		Card {
-			name: "Kranich",
-			color: "Blue",
+			name: "Kranich".to_string(),
+			color: "Blue".to_string(),
 			moves: MOVE_F | MOVE_BL | MOVE_BR,
 		},
 		Card {
-			name: "Frosch",
-			color: "Red",
+			name: "Frosch".to_string(),
+			color: "Red".to_string(),
 			moves: MOVE_FL | MOVE_LL | MOVE_BR,
 		},
 		Card {
-			name: "Hase",
-			color: "Blue",
+			name: "Hase".to_string(),
+			color: "Blue".to_string(),
 			moves: MOVE_FR | MOVE_RR | MOVE_BL,
 		},
 	][index].clone()

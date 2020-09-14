@@ -3,7 +3,7 @@ use std::io::Write;
 use std::fmt;
 use std::collections::HashMap;
 use rand::seq::SliceRandom;
-use serde::{Serialize};
+use serde::{Serialize, Deserialize};
 
 use crate::field::Field;
 use crate::card::{Card, get_card_by_index};
@@ -12,7 +12,7 @@ use crate::piece::Piece;
 use crate::position::Position;
 use crate::move_option::MoveOption;
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Game {
 	field: Field,
 	players: [Player; 2],
@@ -53,8 +53,8 @@ impl Game {
 		};
 
 		let players: [Player; 2] = [
-			Player {color: "Blue", cards: player1_cards, bot_strength: player1_bot_strength},
-			Player {color: "Red", cards: player2_cards, bot_strength: player2_bot_strength},
+			Player {color: "Blue".to_string(), cards: player1_cards, bot_strength: player1_bot_strength},
+			Player {color: "Red".to_string(), cards: player2_cards, bot_strength: player2_bot_strength},
 		];
 		let current_player = if players[0].color == public_card.color {0} else {1};
 

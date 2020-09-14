@@ -5,7 +5,7 @@ use crate::card::Card;
 
 #[derive(cmp::PartialEq, cmp::Eq, Serialize, Deserialize)]
 pub struct Player {
-	pub color: &'static str,
+	pub color: String,
 	pub cards: [Card; 2],
 	pub bot_strength: Option<u64>,
 }
