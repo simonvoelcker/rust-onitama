@@ -3,30 +3,22 @@ import { AppConsumer, AppContext } from '../../context/AppContext'
 import Cell from './Cell'
 
 export default class Field extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      pieces: [
-        [null, null, null, null, 'A'],
-        [null, null, null, null, null],
-        [null, null, null, null, null],
-        [null, null, null, null, null],
-        [null, null, null, 'A', null],
-      ],
-    }
+  getCell (x, y) {
+    let cellIndex = y*5+x
+    let piece = this.context.state.game.field.pieces[cellIndex]
+    return <Cell key={cellIndex} piece={piece} />
   }
 
   render () {
-    let {pieces} = this.state
     return (
       <AppConsumer>
         {({ state, mutations }) => (
           <div className='field-panel'>
             <div className='field-rows'>
-            {pieces.map((row, rowIndex) => {
+            {[0,1,2,3,4].map((y) => {
               return (
-                <div className='field-columns'>
-                {row.map((cell, cellIndex) => <Cell content={cell} /> )}
+                <div key={y} className='field-columns'>
+                {[0,1,2,3,4].map((x) => this.getCell(x, y))}
                 </div>
               )
             })}

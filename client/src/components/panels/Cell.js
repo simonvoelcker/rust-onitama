@@ -2,9 +2,19 @@ import React, { Component } from 'react'
 import { AppConsumer, AppContext } from '../../context/AppContext'
 
 export default class Cell extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
+  renderPiece (piece) {
+    if (piece.is_master) {
+      if (piece.player === 0) {
+        return <span>M</span>
+      } else {
+        return <span>m</span>
+      }
+    } else {
+      if (piece.player === 0) {
+        return <span>A</span>
+      } else {
+        return <span>a</span>
+      }
     }
   }
 
@@ -13,7 +23,7 @@ export default class Cell extends Component {
       <AppConsumer>
         {({ state, mutations }) => (
           <div className='cell'>
-            <span>{this.props.content}</span>
+            {this.props.piece && this.renderPiece(this.props.piece)}
           </div>
         )}
       </AppConsumer>

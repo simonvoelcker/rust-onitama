@@ -16,12 +16,20 @@ export class AppProvider extends Component {
 
     this.state = {
       gameId: null,
+      game: null,
     }
 
     this.mutations = {
       startNewGame: () => {
         return $axios.post('/games').then((response) => {
-          console.log(response)
+          this.setState({gameId: response.data})
+          this.mutations.getGame(response.data);
+        })
+      },
+      getGame: (gameId) => {
+        return $axios.get('/games/' + gameId).then((response) => {
+          this.setState({game: response.data})
+          console.log(response.data)
         })
       }
     }

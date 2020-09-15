@@ -10,7 +10,7 @@ export default class Operate extends Component {
       <AppConsumer>
         {({ state, mutations }) => (
           <div className='operate'>
-            {state.gameId === null
+            {state.game === null
             ? <StandardButton onClick={() => mutations.startNewGame()}>New Game</StandardButton>
             : <Field />
             }

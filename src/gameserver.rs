@@ -22,6 +22,8 @@ async fn main() {
     	do_nonsense();
     }
 
+    let cors = warp::cors().allow_any_origin().allow_methods(vec!["GET", "POST"]);
+
     let api_routes = warp::post().and(warp::path!("api"/"games")).map(create_game)
     	.or(warp::get().and(warp::path!("api"/"games")).map(list_games))
     	.or(warp::get().and(warp::path!("api"/"games"/u32)).map(get_game))
@@ -30,7 +32,7 @@ async fn main() {
 
     let static_routes = warp::path("static").and(warp::fs::dir("client/static"));
 
-    let routes = api_routes.or(static_routes);
+    let routes = api_routes.or(static_routes).with(cors);
 
     warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
 }
