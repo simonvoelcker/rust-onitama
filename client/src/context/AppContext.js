@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
-import $backend from '../backend'
+
+import axios from 'axios'
+
+const $axios = axios.create({
+  baseURL: process.env.NODE_ENV === 'production' ? '/api/' : 'http://localhost:3030/api/',
+  timeout: 10000,
+  headers: { 'Content-Type': 'application/json' }
+})
 
 export const AppContext = React.createContext()
 
@@ -8,18 +15,21 @@ export class AppProvider extends Component {
     super(props)
 
     this.state = {
+      gameId: null,
     }
 
     this.mutations = {
-      getGameIds: () => {
-        return $backend.getGameIds()
+      startNewGame: () => {
+        return $axios.post('/games').then((response) => {
+          console.log(response)
+        })
       }
     }
   }
 
   render () {
     return (
-      <AppContext.Provider value={{ store: this.state, mutations: this.mutations }}>
+      <AppContext.Provider value={{ state: this.state, mutations: this.mutations }}>
         {this.props.children}
       </AppContext.Provider>
     )

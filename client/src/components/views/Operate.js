@@ -2,14 +2,18 @@ import React, { Component } from 'react'
 
 import Field from '../panels/Field'
 import { AppConsumer, AppContext } from '../../context/AppContext'
+import StandardButton from '../panels/StandardButton'
 
 export default class Operate extends Component {
   render () {
     return (
       <AppConsumer>
-        {({ store, mutations }) => (
+        {({ state, mutations }) => (
           <div className='operate'>
-            <Field />
+            {state.gameId === null
+            ? <StandardButton onClick={() => mutations.startNewGame()}>New Game</StandardButton>
+            : <Field />
+            }
           </div>
         )}
       </AppConsumer>

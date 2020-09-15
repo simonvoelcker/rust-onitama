@@ -6,7 +6,7 @@ export default class StandardButton extends Component {
     const { onClick, color, children, disabled, style, className } = this.props
     return (
       <AppConsumer>
-        {({ store }) => (
+        {({ state }) => (
           <button
             style={style}
             className={className || 'btn'}
