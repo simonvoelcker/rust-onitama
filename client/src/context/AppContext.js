@@ -17,6 +17,12 @@ export class AppProvider extends Component {
     this.state = {
       gameId: null,
       game: null,
+      options: null,
+      selection: {
+        from_position: null,
+        target_position: null,
+        card: null,
+      }
     }
 
     this.mutations = {
@@ -24,14 +30,31 @@ export class AppProvider extends Component {
         return $axios.post('/games').then((response) => {
           this.setState({gameId: response.data})
           this.mutations.getGame(response.data);
+          this.mutations.getOptions(response.data);
         })
       },
       getGame: (gameId) => {
         return $axios.get('/games/' + gameId).then((response) => {
           this.setState({game: response.data})
-          console.log(response.data)
         })
-      }
+      },
+      getOptions: (gameId) => {
+        return $axios.get('/games/' + gameId + '/options').then((response) => {
+          this.setState({options: response.data})
+        })
+      },
+      onCellClick: (piece, x, y) => {
+        if (piece && piece.player === this.state.game.current_player) {
+          // own piece clicked -> from_position selected
+          this.setState({selection: {from_position: {x: x, y: y}, target_position: null, card: null}})
+        } else {
+          // either opponent piece clicked or no piece at all -> target_position selected
+          this.setState({selection: {from_position: null, target_position: {x: x, y: y}, card: null}})
+        }
+      },
+      onCardClick: (cardName) => {
+        this.setState({selection: {from_position: null, target_position: null, card: cardName}})
+      },
     }
   }
 

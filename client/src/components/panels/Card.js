@@ -4,7 +4,14 @@ import { AppConsumer, AppContext } from '../../context/AppContext'
 export default class Card extends Component {
 
   getClasses () {
-    return this.props.mini ? 'card mini-card' : 'card'
+    let classes = 'card'
+    if (this.context.state.selection.card === this.props.name) {
+      classes += ' selected-card'
+    }
+    if (this.props.mini) {
+      classes += ' mini-card'
+    }
+    return classes
   }
 
   getImageSrc () {
@@ -15,7 +22,10 @@ export default class Card extends Component {
     return (
       <AppConsumer>
         {({ state, mutations }) => (
-          <img className={this.getClasses()} src={this.getImageSrc()} alt='card' />
+          <img onClick={() => mutations.onCardClick(this.props.name)}
+               className={this.getClasses()}
+               src={this.getImageSrc()}
+               alt='card' />
         )}
       </AppConsumer>
     )
