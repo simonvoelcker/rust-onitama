@@ -4,12 +4,12 @@ import Field from '../panels/Field'
 import { AppConsumer, AppContext } from '../../context/AppContext'
 import StandardButton from '../panels/StandardButton'
 
-export default class Operate extends Component {
+export default class Game extends Component {
   render () {
     return (
       <AppConsumer>
         {({ state, mutations }) => (
-          <div className='operate'>
+          <div>
             {state.game === null
             ? <StandardButton onClick={() => mutations.startNewGame()}>New Game</StandardButton>
             : <Field />
@@ -21,4 +21,4 @@ export default class Operate extends Component {
   }
 }
 
-Operate.contextType = AppContext
+Game.contextType = AppContext

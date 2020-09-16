@@ -5,7 +5,7 @@ import { AppProvider } from './context/AppContext'
 import 'bootstrap/dist/css/bootstrap.css'
 import './assets/css/main.sass'
 
-import Operate from './components/views/Operate'
+import Game from './components/views/Game'
 
 class App extends Component {
   render () {
@@ -14,7 +14,7 @@ class App extends Component {
         <Router>
           <div className='App'>
             <Switch>
-              <Route path='/' component={Operate} exact />
+              <Route path='/' component={Game} exact />
               <Route>
                 <Redirect to='/' />
               </Route>
