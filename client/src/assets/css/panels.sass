@@ -1,22 +1,30 @@
 .cell
-    background-color: grey
-    width: 100px
-    height: 100px
-    padding: 10px
+    width: 94px
+    height: 92px
 
     border: 1px
     border-style: solid
     border-color: black
+    
+    .piece
+        width: 100%
+        height: 100%
 
 .field-panel
-    width: 500px
-    height: 500px
-    background-color: white
+    width: 512px
+    height: 833px
+    background-image: url('http://localhost:3030/static/board.jpg')
+    background-size: 100%
 
-    .field-rows
-        display: flex
-        flex-direction: column
+    .field
+        margin-top: 187px
+        margin-left: 22px
+    
+        .field-rows
+            display: flex
+            flex-direction: column
 
-    .field-columns
-        display: flex
-        flex-direction: row
+        .field-columns
+            display: flex
+            flex-direction: row
+

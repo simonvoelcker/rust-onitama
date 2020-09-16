@@ -2,20 +2,11 @@ import React, { Component } from 'react'
 import { AppConsumer, AppContext } from '../../context/AppContext'
 
 export default class Cell extends Component {
-  renderPiece (piece) {
-    if (piece.is_master) {
-      if (piece.player === 0) {
-        return <span>M</span>
-      } else {
-        return <span>m</span>
-      }
-    } else {
-      if (piece.player === 0) {
-        return <span>A</span>
-      } else {
-        return <span>a</span>
-      }
-    }
+
+  getImageSrc () {
+    let color = this.props.piece.player === 0 ? 'blue' : 'red'
+    let kind = this.props.piece.is_master ? 'master' : 'apprentice'
+    return 'http://localhost:3030/static/piece-' + color + '-' + kind + '.png'
   }
 
   render () {
@@ -23,7 +14,7 @@ export default class Cell extends Component {
       <AppConsumer>
         {({ state, mutations }) => (
           <div className='cell'>
-            {this.props.piece && this.renderPiece(this.props.piece)}
+            {this.props.piece && <img className='piece' src={this.getImageSrc()} alt='piece' />}
           </div>
         )}
       </AppConsumer>
