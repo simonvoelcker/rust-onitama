@@ -5,7 +5,7 @@ import Card from './Card'
 export default class Player extends Component {
 
   getClasses () {
-    return 'player-panel player' + this.props.playerIndex + '-panel'
+    return this.props.playerIndex === '0' ? 'player-panel' : 'player-panel opponent-player-panel'
   }
 
   render () {
@@ -13,16 +13,14 @@ export default class Player extends Component {
       <AppConsumer>
         {({ state }) => (
           <div className={this.getClasses()}>
-            { this.props.playerIndex === "0" && state.game.current_player === 0 &&
-              <Card mini name='pferd' />
+            { parseInt(this.props.playerIndex) === state.game.current_player
+              ? <Card mini name={state.game.public_card.name.toLowerCase()} />
+              : <div className='mini-card'></div>
             }
             <div className='cards'>
-              <Card name='hase' />
-              <Card name='drache' />
+              <Card name={state.game.players[this.props.playerIndex].cards[0].name.toLowerCase()} />
+              <Card name={state.game.players[this.props.playerIndex].cards[1].name.toLowerCase()} />
             </div>
-            { this.props.playerIndex === "1" && state.game.current_player === 1 &&
-              <Card mini name='pferd' />
-            }
           </div>
         )}
       </AppConsumer>
