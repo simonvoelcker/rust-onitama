@@ -5,7 +5,7 @@ export default class Card extends Component {
 
   getClasses () {
     let classes = 'card'
-    if (this.context.state.selection.card === this.props.name) {
+    if (this.context.state.selection.cardName === this.props.name) {
       classes += ' selected-card'
     }
     if (this.props.mini) {
@@ -15,7 +15,7 @@ export default class Card extends Component {
   }
 
   getImageSrc () {
-    return 'http://localhost:3030/static/card-' + this.props.name + '.jpg'
+    return 'http://localhost:3030/static/card-' + this.props.name.toLowerCase() + '.jpg'
   }
 
   render () {

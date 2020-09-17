@@ -4,12 +4,12 @@ import { AppConsumer, AppContext } from '../../context/AppContext'
 export default class Cell extends Component {
 
   getClasses () {
-    let from_selected = this.context.state.selection.from_position
-    if (from_selected && from_selected.x === this.props.x && from_selected.y === this.props.y) {
+    let from = this.context.state.selection.fromPosition
+    if (from && from.x === this.props.position.x && from.y === this.props.position.y) {
       return 'cell from-cell'
     }
-    let target_selected = this.context.state.selection.target_position
-    if (target_selected && target_selected.x === this.props.x && target_selected.y === this.props.y) {
+    let target = this.context.state.selection.targetPosition
+    if (target && target.x === this.props.position.x && target.y === this.props.position.y) {
       return 'cell target-cell'
     }
     return 'cell'
@@ -27,7 +27,7 @@ export default class Cell extends Component {
         {({ state, mutations }) => (
           <div
             className={this.getClasses()}
-            onClick={() => mutations.onCellClick(this.props.piece, this.props.x, this.props.y)}>
+            onClick={() => mutations.onCellClick(this.props.piece, this.props.position)}>
             {this.props.piece && <img className='piece' src={this.getImageSrc()} alt='piece' />}
           </div>
         )}

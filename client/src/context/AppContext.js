@@ -14,15 +14,17 @@ export class AppProvider extends Component {
   constructor (props) {
     super(props)
 
+    this.options = null // options from game server
+
     this.state = {
       gameId: null,
       game: null,
-      options: null,
       selection: {
-        from_position: null,
-        target_position: null,
-        card: null,
-      }
+        fromPosition: null,
+        targetPosition: null,
+        cardName: null,
+      },
+      selectableOptions: [], // options filtered down by selection
     }
 
     this.mutations = {
@@ -40,22 +42,76 @@ export class AppProvider extends Component {
       },
       getOptions: (gameId) => {
         return $axios.get('/games/' + gameId + '/options').then((response) => {
-          this.setState({options: response.data})
+          this.options = response.data
+          this.clearSelection()
         })
       },
-      onCellClick: (piece, x, y) => {
+      onCellClick: (piece, position) => {
         if (piece && piece.player === this.state.game.current_player) {
           // own piece clicked -> from_position selected
-          this.setState({selection: {from_position: {x: x, y: y}, target_position: null, card: null}})
+          this.setOrKeepSelection(position, null, null)
         } else {
           // either opponent piece clicked or no piece at all -> target_position selected
-          this.setState({selection: {from_position: null, target_position: {x: x, y: y}, card: null}})
+          this.setOrKeepSelection(null, position, null)
         }
       },
       onCardClick: (cardName) => {
-        this.setState({selection: {from_position: null, target_position: null, card: cardName}})
+        this.setOrKeepSelection(null, null, cardName)
       },
     }
+  }
+
+  setOrKeepSelection (fromPosition, targetPosition, cardName) {
+    let selection = {
+      fromPosition: fromPosition || this.state.selection.fromPosition,
+      targetPosition: targetPosition || this.state.selection.targetPosition,
+      cardName: cardName || this.state.selection.cardName,
+    }
+    this.setSelection(selection)
+  }
+
+  setSelection(selection) {
+    // apply selection change only if we'll have at least one option after this
+    let selectableOptions = this.filterSelectionOptions(selection)
+    if (selectableOptions.length > 0) {
+      this.setState({
+        selection: selection,
+        selectableOptions: selectableOptions,
+      })
+    } else {
+      this.clearSelection()
+    }
+  }
+
+  clearSelection () {
+    this.setState({
+      selection: {
+        fromPosition: null,
+        targetPosition: null,
+        cardName: null,
+      },
+      selectableOptions: this.state.options,
+    })
+  }
+
+  filterSelectionOptions (selection) {
+    let filteredOptions = this.options.filter(option => {
+      if (selection.fromPosition !== null && (
+          option.from_position.x !== selection.fromPosition.x ||
+          option.from_position.y !== selection.fromPosition.y)) {
+        return false
+      }
+      if (selection.targetPosition !== null && (
+          option.target_position.x !== selection.targetPosition.x ||
+          option.target_position.y !== selection.targetPosition.y)) {
+        return false
+      }
+      if (selection.cardName !== null && option.card.name !== selection.cardName) {
+        return false
+      }
+      return true
+    })
+    return filteredOptions
   }
 
   render () {

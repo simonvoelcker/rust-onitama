@@ -7,7 +7,8 @@ export default class Field extends Component {
   getCell (x, y) {
     let cellIndex = y*5+x
     let piece = this.context.state.game.field.pieces[cellIndex]
-    return <Cell x={x} y={y} piece={piece} key={cellIndex} />
+    let position = {x: x, y: y}
+    return <Cell position={position} piece={piece} key={cellIndex} />
   }
 
   render () {

@@ -14,12 +14,12 @@ export default class Player extends Component {
         {({ state }) => (
           <div className={this.getClasses()}>
             { parseInt(this.props.playerIndex) === state.game.current_player
-              ? <Card mini name={state.game.public_card.name.toLowerCase()} />
+              ? <Card mini name={state.game.public_card.name} />
               : <div className='mini-card'></div>
             }
             <div className='cards'>
-              <Card name={state.game.players[this.props.playerIndex].cards[0].name.toLowerCase()} />
-              <Card name={state.game.players[this.props.playerIndex].cards[1].name.toLowerCase()} />
+              <Card name={state.game.players[this.props.playerIndex].cards[0].name} />
+              <Card name={state.game.players[this.props.playerIndex].cards[1].name} />
             </div>
           </div>
         )}
