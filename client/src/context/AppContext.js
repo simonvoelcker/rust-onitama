@@ -31,8 +31,8 @@ export class AppProvider extends Component {
       startNewGame: () => {
         return $axios.post('/games').then((response) => {
           this.setState({gameId: response.data})
-          this.mutations.getGame(response.data);
-          this.mutations.getOptions(response.data);
+          this.mutations.getGame(response.data)
+          this.mutations.getOptions(response.data)
         })
       },
       getGame: (gameId) => {
@@ -44,6 +44,12 @@ export class AppProvider extends Component {
         return $axios.get('/games/' + gameId + '/options').then((response) => {
           this.options = response.data
           this.clearSelection()
+        })
+      },
+      pickOption: (optionIndex) => {
+        return $axios.post('/games/' + this.state.gameId + '/options/' + optionIndex).then((response) => {
+          this.mutations.getGame(this.state.gameId)
+          this.mutations.getOptions(this.state.gameId)
         })
       },
       onCellClick: (piece, position) => {
@@ -78,6 +84,15 @@ export class AppProvider extends Component {
         selection: selection,
         selectableOptions: selectableOptions,
       })
+
+      if (selection.fromPosition !== null &&
+          selection.targetPosition !== null &&
+          selection.cardName !== null &&
+          selectableOptions.length === 1) {
+        // everything selected, apply!
+        let optionIndex = this.options.indexOf(selectableOptions[0])
+        this.mutations.pickOption(optionIndex)
+      }
     } else {
       this.clearSelection()
     }
