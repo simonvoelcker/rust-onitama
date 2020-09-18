@@ -3,7 +3,8 @@ FROM node:14-stretch-slim
 COPY . $HOME
 
 # Build frontend
-RUN cd client && npm update && npm install && npm rebuild node-sass && npm run build
+# Scratch that - JS is too broken, just check in the built files for now.
+# RUN cd client && npm update && npm install && npm rebuild node-sass && npm run build
 
 # Get Rust
 RUN apt-get update && apt-get install curl build-essential sqlite3 -y
