@@ -18,7 +18,7 @@ export default class Cell extends Component {
   getImageSrc () {
     let color = this.props.piece.player === 0 ? 'blue' : 'red'
     let kind = this.props.piece.is_master ? 'master' : 'apprentice'
-    return '/img/piece-' + color + '-' + kind + '.png'
+    return '/img/piece-' + color + '-' + kind + '-front.png'
   }
 
   render () {
