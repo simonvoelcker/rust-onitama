@@ -3,4 +3,5 @@ target
 games_db.sqlite
 
 client/node_modules
+client/build
 

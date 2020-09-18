@@ -30,9 +30,10 @@ async fn main() {
     	.or(warp::get().and(warp::path!("api"/"games"/u32/"options")).map(list_options))
     	.or(warp::post().and(warp::path!("api"/"games"/u32/"options"/u32)).map(pick_option));
 
-    let static_routes = warp::path("static").and(warp::fs::dir("client/static"));
+    let client_route = warp::get().and(warp::fs::dir("client/build"));
+    let img_route = warp::get().and(warp::path("img")).and(warp::fs::dir("client/img"));
 
-    let routes = api_routes.or(static_routes).with(cors);
+    let routes = api_routes.or(client_route).or(img_route).with(cors);
 
     warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
 }
