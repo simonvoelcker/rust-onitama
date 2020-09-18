@@ -15,17 +15,19 @@ export default class Card extends Component {
   }
 
   getImageSrc () {
-    return '/img/card-' + this.props.name.toLowerCase() + '.jpg'
+    return 'http://localhost:3030/img/card-' + this.props.name.toLowerCase() + '.jpg'
   }
 
   render () {
     return (
       <AppConsumer>
         {({ state, mutations }) => (
-          <img onClick={() => mutations.onCardClick(this.props.name)}
-               className={this.getClasses()}
-               src={this.getImageSrc()}
-               alt='card' />
+          <div className='card-container'>
+            <img onClick={() => mutations.onCardClick(this.props.name)}
+                 className={this.getClasses()}
+                 src={this.getImageSrc()}
+                 alt='card' />
+          </div>
         )}
       </AppConsumer>
     )
