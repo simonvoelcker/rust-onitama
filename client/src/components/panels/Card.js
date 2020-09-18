@@ -15,7 +15,7 @@ export default class Card extends Component {
   }
 
   getImageSrc () {
-    return 'http://localhost:3030/img/card-' + this.props.name.toLowerCase() + '.jpg'
+    return '/img/card-' + this.props.name.toLowerCase() + '.jpg'
   }
 
   render () {
