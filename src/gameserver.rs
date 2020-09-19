@@ -35,5 +35,5 @@ async fn main() {
 
     let routes = api_routes.or(client_route).or(img_route).with(cors);
 
-    warp::serve(routes).run(([0, 0, 0, 0], 80)).await;
+    warp::serve(routes).run(([0, 0, 0, 0], 3030)).await;
 }

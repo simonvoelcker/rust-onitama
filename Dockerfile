@@ -12,6 +12,6 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >> rustup-init.sh
 RUN chmod +x rustup-init.sh && ./rustup-init.sh -y
 
 # Build backend
-RUN $HOME/.cargo/bin/cargo build
+RUN $HOME/.cargo/bin/cargo build --bin gameserver
 
 ENTRYPOINT $HOME/.cargo/bin/cargo run --bin gameserver
