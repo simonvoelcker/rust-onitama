@@ -10,8 +10,6 @@ export class AppProvider extends Component {
   constructor (props) {
     super(props)
 
-    this.options = null // options from game server
-
     this.state = {
       gameId: null,
       game: null,
@@ -20,6 +18,7 @@ export class AppProvider extends Component {
         targetPosition: null,
         cardName: null,
       },
+      options: null, // options from game server
       selectableOptions: [], // options filtered down by selection
     }
 
@@ -38,7 +37,7 @@ export class AppProvider extends Component {
       },
       getOptions: (gameId) => {
         return $axios.get('/games/' + gameId + '/options').then((response) => {
-          this.options = response.data
+          this.setState({options: response.data})
           this.clearSelection()
         })
       },
@@ -106,7 +105,7 @@ export class AppProvider extends Component {
   }
 
   filterSelectionOptions (selection) {
-    let filteredOptions = this.options.filter(option => {
+    let filteredOptions = this.state.options.filter(option => {
       if (selection.fromPosition !== null && (
           option.from_position.x !== selection.fromPosition.x ||
           option.from_position.y !== selection.fromPosition.y)) {
