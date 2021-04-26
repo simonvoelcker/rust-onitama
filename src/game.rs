@@ -67,8 +67,11 @@ impl Game {
 	}
 
 	pub fn get_all_options(&self) -> Vec<MoveOption> {
-		let cards = &self.players[self.current_player].cards;
 		let mut options: Vec<MoveOption> = Vec::new();
+		if let GameResult::DecidedWithWinner(_) = self.get_result() {
+	        return options;
+	    }
+		let cards = &self.players[self.current_player].cards;
 
 		for field_index in 0..25 {
 			let position = Position::from_field_index(field_index);
