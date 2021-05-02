@@ -85,7 +85,7 @@ export class AppProvider extends Component {
           selection.cardName !== null &&
           selectableOptions.length === 1) {
         // everything selected, apply!
-        let optionIndex = this.options.indexOf(selectableOptions[0])
+        let optionIndex = this.state.options.indexOf(selectableOptions[0])
         this.mutations.pickOption(optionIndex)
       }
     } else {

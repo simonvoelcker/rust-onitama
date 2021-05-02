@@ -6,7 +6,7 @@ export default class Dialog extends Component {
   render () {
     return (
       <AppConsumer>
-        {({ state }) => (
+        {({ state, mutations }) => (
           <div>
             Welcome!
             This is a simple game called Onitama. I did not invent it, I merely implemented this online version of it as s hobby project.
