@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import Field from '../panels/Field'
 import { AppConsumer, AppContext } from '../../context/AppContext'
-import StandardButton from '../panels/StandardButton'
+import Dialog from './Dialog'
 
 export default class Game extends Component {
   render () {
@@ -11,7 +11,7 @@ export default class Game extends Component {
         {({ state, mutations }) => (
           <div>
             {state.game === null
-            ? <StandardButton onClick={() => mutations.startNewGame()}>New Game</StandardButton>
+            ? <Dialog />
             : <Field />
             }
           </div>
