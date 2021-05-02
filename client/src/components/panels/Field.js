@@ -15,20 +15,22 @@ export default class Field extends Component {
     return (
       <AppConsumer>
         {({ state, mutations }) => (
-          <div className='field-panel'>
-            <Player playerIndex='1' />
-            <div className='field'>
-              <div className='field-rows'>
-              {[4,3,2,1,0].map((y) => {
-                return (
-                  <div key={y} className='field-columns'>
-                  {[0,1,2,3,4].map((x) => this.getCell(x, y))}
-                  </div>
-                )
-              })}
+          <div className='field-panel-wrapper'>
+            <div className='field-panel'>
+              <Player playerIndex='1' />
+              <div className='field'>
+                <div className='field-rows'>
+                {[4,3,2,1,0].map((y) => {
+                  return (
+                    <div key={y} className='field-columns'>
+                    {[0,1,2,3,4].map((x) => this.getCell(x, y))}
+                    </div>
+                  )
+                })}
+                </div>
               </div>
+              <Player playerIndex='0' />
             </div>
-            <Player playerIndex='0' />
           </div>
         )}
       </AppConsumer>

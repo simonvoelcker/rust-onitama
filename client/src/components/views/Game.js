@@ -12,7 +12,7 @@ export default class Game extends Component {
         {({ state, mutations }) => (
           <div>
             {state.game === null && <WelcomeDialog />}
-            {state.game !== null && state.options && state.options.length > 0 && <Field />}
+            {state.game !== null && <Field />}
             {state.game !== null && state.options && state.options.length === 0 && <GameOverDialog />}
           </div>
         )}

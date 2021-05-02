@@ -51,19 +51,27 @@
     transform: rotate(180deg)
     transform-origin: center
 
-.field-panel
-    width: 512px
-    height: 833px
-    background-image: url("../img/board.jpg")
-    background-size: 100%
+.field-panel-wrapper
+    width: 100%
+    height: 100%
+    position: absolute
+    display: flex
+    justify-content: center
+    align-items: center
 
-    .field
-        margin-left: 25px
-    
-        .field-rows
-            display: flex
-            flex-direction: column
+    .field-panel
+        width: 512px
+        height: 833px
+        background-image: url("../img/board.jpg")
+        background-size: 100%
 
-        .field-columns
-            display: flex
-            flex-direction: row
+        .field
+            margin-left: 25px
+
+            .field-rows
+                display: flex
+                flex-direction: column
+
+            .field-columns
+                display: flex
+                flex-direction: row
