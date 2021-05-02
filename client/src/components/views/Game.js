@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 
 import Field from '../panels/Field'
 import { AppConsumer, AppContext } from '../../context/AppContext'
-import Dialog from './Dialog'
+import WelcomeDialog from './WelcomeDialog'
+import GameOverDialog from './GameOverDialog'
 
 export default class Game extends Component {
   render () {
@@ -10,10 +11,9 @@ export default class Game extends Component {
       <AppConsumer>
         {({ state, mutations }) => (
           <div>
-            {state.game === null
-            ? <Dialog />
-            : <Field />
-            }
+            {state.game === null && <WelcomeDialog />}
+            {state.game !== null && state.options && state.options.length > 0 && <Field />}
+            {state.game !== null && state.options && state.options.length === 0 && <GameOverDialog />}
           </div>
         )}
       </AppConsumer>

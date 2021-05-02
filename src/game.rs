@@ -208,12 +208,17 @@ impl Game {
 
 	fn make_bot_move(&mut self, bot_strength: u64) {
 	    let mut options: Vec<MoveOption> = self.get_all_options();
+
+        if options.len() == 0 {
+            print!("Bot has no options");
+            return
+        }
+
 		let mut rng = &mut rand::thread_rng();
 		options.shuffle(&mut rng);
 
 	    let depth: usize = self.propose_evaluation_depth(bot_strength);
 		print!("Bot has {} options. Evaluating (depth {}) .", options.len(), depth);
-
 		let mut score_cache: HashMap<u64, f64> = HashMap::new();
 		let mut highest_score: f64 = 0.0;
 		let mut best_option: &MoveOption = &options[0];
